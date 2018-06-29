@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/lib/Col';
 
 import TopMenu from '../top-menu/top-menu';
 import bem from '../../utils/bem';
-import RouteRoot from '../route-root/route-root';
+import RouteAbout from '../route-about/route-about';
 
 
 const BLOCK_CLASS = 'main';
@@ -18,9 +18,10 @@ export default function Main() {
                 <Row>
                     <Col md={2} />
                     <Col md={8}>
-                        <Route exact path="/" component={RouteRoot} />
+                        <Route exact path="/" component={null} />
                         <Route exact path="/login" component={null} />
                         <Route exact path="/profile" component={null} />
+                        <Route exact path="/about" component={RouteAbout} />
                     </Col>
                     <Col md={2} />
                 </Row>

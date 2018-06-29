@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
 import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
-import { Link } from 'react-router-dom';
+import Link from '../common/link/link';
 
 import bem from '../../utils/bem';
 
@@ -18,7 +18,9 @@ export default function TopMenu() {
         <Navbar collapseOnSelect className={bem(BLOCK_CLASS)}>
             <Navbar.Header>
                 <Navbar.Brand>
-                    <Link to="/">Pasta 2.0</Link>
+                    <Link component="a" to="/">
+                        Pasta 2.0
+                    </Link>
                 </Navbar.Brand>
                 <Navbar.Toggle />
             </Navbar.Header>
@@ -28,12 +30,16 @@ export default function TopMenu() {
                         Create
                     </NavItem>
                     <NavDropdown title="Documentation" id="docsDropdown">
-                        <MenuItem>
+                        <Link to="/docs" component={MenuItem}>
                             Read docs
-                        </MenuItem>
-                        <MenuItem>
+                        </Link>
+                        <Link to="faq" component={MenuItem}>
                             FAQ
-                        </MenuItem>
+                        </Link>
+                        <MenuItem divider />
+                        <Link to="/about" component={MenuItem}>
+                            About
+                        </Link>
                     </NavDropdown>
                 </Nav>
                 <Nav pullRight>
