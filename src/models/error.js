@@ -28,7 +28,7 @@ export const removeError = () => (dispatch) => {
 };
 
 export const reducer = handleActions({
-    [setErrorAction]: (state, {title, message}) => ({...state, title, message}),
+    [setErrorAction]: (state, {payload: {title, message}}) => ({...state, title, message}),
 
     [removeErrorAction]: () => initialState
 }, initialState);
