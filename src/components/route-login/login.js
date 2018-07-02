@@ -4,6 +4,8 @@ import Checkbox from 'react-bootstrap/lib/Checkbox';
 import Button from 'react-bootstrap/lib/Button';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -51,45 +53,51 @@ class Login extends PureComponent {
             password,
             stayLoggedIn
         } = this.state;
-        this.props.login(email, password, stayLoggedIn);
+        this.props.login(email, password);
     }
 
     render() {
         return (
-            <div className={bem(BLOCK_NAME, 'form')}>
-                <form onSubmit={this.handleSubmit}>
-                    <FormGroup>
-                        <ControlLabel>
-                            Email:
-                        </ControlLabel>
-                        <FormControl
-                            type="email"
-                            placeholder="john.doe@example.com"
-                            onChange={this.handleEmailChange}
-                        />
-                    </FormGroup>
-                    <FormGroup>
-                        <ControlLabel>
-                            Password:
-                        </ControlLabel>
-                        <FormControl
-                            type="password"
-                            placeholder="mystrongpassword123"
-                            onChange={this.handlePasswordChange}
-                        />
-                    </FormGroup>
-                    <FormGroup>
-                        <Checkbox onChange={this.handleStayLoggedInChange}>
-                            Remember me
-                        </Checkbox>
-                    </FormGroup>
-                    <FormGroup>
-                        <Button type="submit">
-                            Login
-                        </Button>
-                    </FormGroup>
-                </form>
-            </div>
+            <Row>
+                <Col md={4} />
+                <Col md={4}>
+                    <div className={bem(BLOCK_NAME, 'form')}>
+                        <form onSubmit={this.handleSubmit}>
+                            <FormGroup>
+                                <ControlLabel>
+                                    Email:
+                                </ControlLabel>
+                                <FormControl
+                                    type="email"
+                                    placeholder="john.doe@example.com"
+                                    onChange={this.handleEmailChange}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <ControlLabel>
+                                    Password:
+                                </ControlLabel>
+                                <FormControl
+                                    type="password"
+                                    placeholder="mystrongpassword123"
+                                    onChange={this.handlePasswordChange}
+                                />
+                            </FormGroup>
+                            <FormGroup>
+                                <Checkbox onChange={this.handleStayLoggedInChange}>
+                                    Remember me
+                                </Checkbox>
+                            </FormGroup>
+                            <FormGroup>
+                                <Button type="submit" bsStyle="success" className="pull-right">
+                                    Login
+                                </Button>
+                            </FormGroup>
+                        </form>
+                    </div>
+                </Col>
+                <Col md={4} />
+            </Row>
         );
     }
 }

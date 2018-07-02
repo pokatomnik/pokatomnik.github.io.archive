@@ -1,10 +1,9 @@
 import { createAction, handleActions } from 'redux-actions';
 import Backendless from 'backendless';
-import { push } from 'react-router-redux';
 
 import { developerEmail } from '../constants';
 import { setError } from './error';
-import { selectGoBackPath } from './history-watcher';
+import { selectGoBackPath, push } from './history-watcher';
 
 export const branch = 'user';
 
@@ -22,7 +21,7 @@ export const selectUserIsAdmin = (state) => state[branch].isAdmin;
 
 export const selectUserName = (state) => state[branch].name;
 
-export const selectUserIsLogged = (state) => Boolean(selectUserEmail(state));
+export const selectUserIsLoggedIn = (state) => Boolean(selectUserEmail(state));
 
 export const selectLoggingIn = (state) => state[branch].loggingIn;
 
@@ -38,10 +37,10 @@ const setLoggingOut = createAction(`${branch}:setLoggingOut`);
 
 const FALLBACK_ROUTE = '/';
 
-export const login = (email, password, stayLoggedIn = false, goTo) => (dispatch, getState) => {
+export const login = (email, password, goTo) => (dispatch, getState) => {
     dispatch(setLoggingIn(true));
     Backendless.UserService
-        .login(email, password, stayLoggedIn)
+        .login(email, password)
         .then(({
             email,
             isAdmin,
@@ -54,10 +53,10 @@ export const login = (email, password, stayLoggedIn = false, goTo) => (dispatch,
             }));
             dispatch(setLoggingIn(false));
             if (goTo) {
-                dispatch(push(goTo));
+                push(goTo)(dispatch, getState);
             } else {
                 const goBackPath = selectGoBackPath(getState());
-                dispatch(push(goBackPath ? goBackPath : FALLBACK_ROUTE))
+                push(goBackPath ? goBackPath : FALLBACK_ROUTE)(dispatch, getState);
             }
         })
         .catch(() => {
@@ -77,10 +76,10 @@ export const logout = (goTo) => (dispatch, getState) => {
             dispatch(removeUserAction());
             dispatch(setLoggingOut(false));
             if (goTo) {
-                dispatch(push(goTo));
+                push(goTo)(dispatch, getState);
             } else {
                 const goBackPath = selectGoBackPath(getState());
-                dispatch(push(goBackPath ? goBackPath : FALLBACK_ROUTE));
+                push(goBackPath ? goBackPath : FALLBACK_ROUTE)(dispatch, getState);
             }
         })
         .catch(() => {
