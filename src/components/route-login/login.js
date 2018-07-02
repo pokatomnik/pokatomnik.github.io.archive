@@ -10,13 +10,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { BLOCK_NAME } from './route-login';
-import {login} from '../../models/user';
+import {
+    login,
+    selectLoggingIn
+} from '../../models/user';
 import bem from '../../utils/bem';
 
 
 class Login extends PureComponent {
     static propTypes = {
-        login: PropTypes.func.isRequired
+        login: PropTypes.func.isRequired,
+        loggingIn: PropTypes.bool.isRequired
     };
 
     constructor(props) {
@@ -89,7 +93,12 @@ class Login extends PureComponent {
                                 </Checkbox>
                             </FormGroup>
                             <FormGroup>
-                                <Button type="submit" bsStyle="success" className="pull-right">
+                                <Button
+                                    type="submit"
+                                    bsStyle="success"
+                                    className="pull-right"
+                                    disabled={this.props.loggingIn}
+                                >
                                     Login
                                 </Button>
                             </FormGroup>
@@ -102,6 +111,10 @@ class Login extends PureComponent {
     }
 }
 
+const mapStateToProps = (state) => ({
+    loggingIn: selectLoggingIn(state)
+});
+
 const actionsMap = {login};
 
-export default connect(null, actionsMap)(Login);
+export default connect(mapStateToProps, actionsMap)(Login);
