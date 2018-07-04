@@ -12,15 +12,21 @@ import { connect } from 'react-redux';
 import { BLOCK_NAME } from './route-login';
 import {
     login,
-    selectLoggingIn
+    selectUserLoggingIn,
+    selectUserLoggingOut,
+    selectUserIsLoggedIn,
 } from '../../models/user';
 import bem from '../../utils/bem';
+import { credentialsToBase64 } from '../../utils/base64';
+import { authKey } from '../../constants';
 
 
 class Login extends PureComponent {
     static propTypes = {
         login: PropTypes.func.isRequired,
-        loggingIn: PropTypes.bool.isRequired
+        userLoggingIn: PropTypes.bool.isRequired,
+        userLoggingOut: PropTypes.bool.isRequired,
+        userIsLoggedIn: PropTypes.bool.isRequired
     };
 
     constructor(props) {
@@ -36,6 +42,17 @@ class Login extends PureComponent {
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleStayLoggedInChange = this.handleStayLoggedInChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    componentWillReceiveProps({userIsLoggedIn: newUserIsLoggedIn}) {
+        const {userIsLoggedIn: oldUserIsLoggedIn} = this.props;
+        if ((!oldUserIsLoggedIn && newUserIsLoggedIn) && this.state.stayLoggedIn) {
+            const {email, password} = this.state;
+            localStorage.setItem(authKey, credentialsToBase64({
+                email,
+                password
+            }));
+        }
     }
 
     handleEmailChange({target: {value: email}}) {
@@ -54,13 +71,17 @@ class Login extends PureComponent {
         evt.preventDefault();
         const {
             email,
-            password,
-            stayLoggedIn
+            password
         } = this.state;
         this.props.login(email, password);
     }
 
+    isBusy() {
+        return this.props.userLoggingIn || this.props.userLoggingOut;
+    }
+
     render() {
+        const busy = this.isBusy();
         return (
             <Row>
                 <Col md={4} />
@@ -74,6 +95,7 @@ class Login extends PureComponent {
                                 <FormControl
                                     type="email"
                                     placeholder="john.doe@example.com"
+                                    disabled={busy}
                                     onChange={this.handleEmailChange}
                                 />
                             </FormGroup>
@@ -84,11 +106,15 @@ class Login extends PureComponent {
                                 <FormControl
                                     type="password"
                                     placeholder="mystrongpassword123"
+                                    disabled={busy}
                                     onChange={this.handlePasswordChange}
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Checkbox onChange={this.handleStayLoggedInChange}>
+                                <Checkbox
+                                    onChange={this.handleStayLoggedInChange}
+                                    disabled={busy}
+                                >
                                     Remember me
                                 </Checkbox>
                             </FormGroup>
@@ -97,7 +123,7 @@ class Login extends PureComponent {
                                     type="submit"
                                     bsStyle="success"
                                     className="pull-right"
-                                    disabled={this.props.loggingIn}
+                                    disabled={busy}
                                 >
                                     Login
                                 </Button>
@@ -112,7 +138,9 @@ class Login extends PureComponent {
 }
 
 const mapStateToProps = (state) => ({
-    loggingIn: selectLoggingIn(state)
+    userLoggingIn: selectUserLoggingIn(state),
+    userLoggingOut: selectUserLoggingOut(state),
+    userIsLoggedIn: selectUserIsLoggedIn(state)
 });
 
 const actionsMap = {login};

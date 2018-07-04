@@ -30,7 +30,7 @@ class LoggedMenu extends PureComponent {
     }
 
     logout() {
-        this.props.logout('/');
+        this.props.logout();
     }
 
     render() {

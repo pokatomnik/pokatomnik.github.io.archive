@@ -1,9 +1,9 @@
 import { createAction, handleActions } from 'redux-actions';
 import Backendless from 'backendless';
+import { push } from 'react-router-redux';
 
 import { developerEmail } from '../constants';
 import { setError } from './error';
-import { selectGoBackPath, push } from './history-watcher';
 
 export const branch = 'user';
 
@@ -23,9 +23,9 @@ export const selectUserName = (state) => state[branch].name;
 
 export const selectUserIsLoggedIn = (state) => Boolean(selectUserEmail(state));
 
-export const selectLoggingIn = (state) => state[branch].loggingIn;
+export const selectUserLoggingIn = (state) => state[branch].loggingIn;
 
-export const selectLoggingOut = (state) => state[branch].loggingOut;
+export const selectUserLoggingOut = (state) => state[branch].loggingOut;
 
 const setUserAction = createAction(`${branch}:setUser`);
 
@@ -35,9 +35,7 @@ const setLoggingIn = createAction(`${branch}:setLoggingIn`);
 
 const setLoggingOut = createAction(`${branch}:setLoggingOut`);
 
-const FALLBACK_ROUTE = '/';
-
-export const login = (email, password, goTo) => (dispatch, getState) => {
+export const login = (email, password, silent = false) => (dispatch, getState) => {
     dispatch(setLoggingIn(true));
     Backendless.UserService
         .login(email, password)
@@ -52,43 +50,34 @@ export const login = (email, password, goTo) => (dispatch, getState) => {
                 name
             }));
             dispatch(setLoggingIn(false));
-            if (goTo) {
-                push(goTo)(dispatch, getState);
-            } else {
-                const goBackPath = selectGoBackPath(getState());
-                push(goBackPath ? goBackPath : FALLBACK_ROUTE)(dispatch, getState);
+            if (!silent) {
+                dispatch(push('/'));
             }
         })
         .catch(() => {
             dispatch(setLoggingIn(false));
-            setError({
-                title: 'Unable to authenticate',
-                message: 'Your email and/or password is/are incorrect.'
-            })(dispatch, getState);
+            setError(
+                'Unable to authenticate', 'Invalid credentials.'
+            )(dispatch, getState);
         });
 };
 
-export const logout = (goTo) => (dispatch, getState) => {
+export const logout = () => (dispatch, getState) => {
     dispatch(setLoggingOut(true));
     Backendless.UserService
         .logout()
         .then(() => {
             dispatch(removeUserAction());
             dispatch(setLoggingOut(false));
-            if (goTo) {
-                push(goTo)(dispatch, getState);
-            } else {
-                const goBackPath = selectGoBackPath(getState());
-                push(goBackPath ? goBackPath : FALLBACK_ROUTE)(dispatch, getState);
-            }
+            dispatch(push('/'));
         })
         .catch(() => {
             dispatch(setLoggingOut(false));
-            setError({
-                title: 'Unable to logout',
-                message: 'Server error: unable to logout. Please try again later or report '
-                    + developerEmail
-            })(dispatch, getState);
+            setError(
+                'Unable to logout',
+                'Server error: unable to logout. Please try again later or report '
+                + developerEmail
+            )(dispatch, getState);
         });
 };
 

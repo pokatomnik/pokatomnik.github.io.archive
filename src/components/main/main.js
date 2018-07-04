@@ -7,6 +7,8 @@ import TopMenu from '../top-menu/top-menu';
 import bem from '../../utils/bem';
 import RouteAbout from '../route-about/route-about';
 import RouteLogin from '../route-login/route-login';
+import AutomaticAuthorizer from '../automatic-authorizer/automatic-authorizer';
+import ErrorModal from '../error-modal/error-modal';
 
 
 const BLOCK_CLASS = 'main';
@@ -14,6 +16,7 @@ const BLOCK_CLASS = 'main';
 export default function Main() {
     return (
         <div className={bem(BLOCK_CLASS)}>
+            <AutomaticAuthorizer />
             <TopMenu />
             <div className="container">
                 <Row>
@@ -27,6 +30,8 @@ export default function Main() {
                     <Col md={2} />
                 </Row>
             </div>
+            <ErrorModal />
         </div>
     );
 }
+
