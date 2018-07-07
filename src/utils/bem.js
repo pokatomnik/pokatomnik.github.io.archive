@@ -1,5 +1,4 @@
 import entries from 'lodash.topairs';
-import memoize from 'lodash.memoize';
 
 // Creates an array of truthy elements
 const joinTruthy = (glue, ...args) => args.filter(arg => arg).join(glue);
@@ -25,4 +24,4 @@ const bem = (blockName, elementName, options = {}) => {
     });
 };
 
-export default memoize(bem);
+export default bem;

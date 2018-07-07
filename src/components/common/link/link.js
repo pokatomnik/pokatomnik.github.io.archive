@@ -14,7 +14,9 @@ class Link extends PureComponent {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    handleClick() {
+    handleClick(evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
         this.props.push(this.props.to);
     }
 

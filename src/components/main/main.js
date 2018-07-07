@@ -9,6 +9,7 @@ import RouteAbout from '../route-about/route-about';
 import RouteLogin from '../route-login/route-login';
 import AutomaticAuthorizer from '../automatic-authorizer/automatic-authorizer';
 import ErrorModal from '../error-modal/error-modal';
+import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 
 
 const BLOCK_CLASS = 'main';
@@ -20,14 +21,15 @@ export default function Main() {
             <TopMenu />
             <div className="container">
                 <Row>
-                    <Col md={2} />
-                    <Col md={8}>
+                    <Col md={1} />
+                    <Col md={10}>
+                        <Breadcrumbs />
                         <Route exact path="/" component={null} />
                         <Route exact path="/login" component={RouteLogin} />
                         <Route exact path="/profile" component={null} />
                         <Route exact path="/about" component={RouteAbout} />
                     </Col>
-                    <Col md={2} />
+                    <Col md={1} />
                 </Row>
             </div>
             <ErrorModal />

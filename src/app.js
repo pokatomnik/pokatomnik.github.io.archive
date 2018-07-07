@@ -9,7 +9,9 @@ import Main from './components/main/main';
 
 import './app.css';
 
-const history = createHistory();
+const history = createHistory({
+    hashType: 'hashbang'
+});
 const store = configureStore(history);
 
 /* Setup the Backendless */
