@@ -1,5 +1,5 @@
 import React from 'react';
-import Login from './login';
+import Login from '../login/login';
 import Alert from 'react-bootstrap/lib/Alert';
 
 

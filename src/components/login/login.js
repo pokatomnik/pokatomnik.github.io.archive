@@ -9,14 +9,12 @@ import Col from 'react-bootstrap/lib/Col';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { BLOCK_NAME } from './route-login';
 import {
     login,
     selectUserLoggingIn,
     selectUserLoggingOut,
     selectUserIsLoggedIn,
 } from '../../models/user';
-import bem from '../../utils/bem';
 import { credentialsToBase64 } from '../../utils/base64';
 import { authKey } from '../../constants';
 
@@ -86,50 +84,48 @@ class Login extends PureComponent {
             <Row>
                 <Col md={4} />
                 <Col md={4}>
-                    <div className={bem(BLOCK_NAME, 'form')}>
-                        <form onSubmit={this.handleSubmit}>
-                            <FormGroup>
-                                <ControlLabel>
-                                    Email:
-                                </ControlLabel>
-                                <FormControl
-                                    type="email"
-                                    placeholder="john.doe@example.com"
-                                    disabled={busy}
-                                    onChange={this.handleEmailChange}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <ControlLabel>
-                                    Password:
-                                </ControlLabel>
-                                <FormControl
-                                    type="password"
-                                    placeholder="mystrongpassword123"
-                                    disabled={busy}
-                                    onChange={this.handlePasswordChange}
-                                />
-                            </FormGroup>
-                            <FormGroup>
-                                <Checkbox
-                                    onChange={this.handleStayLoggedInChange}
-                                    disabled={busy}
-                                >
-                                    Remember me
-                                </Checkbox>
-                            </FormGroup>
-                            <FormGroup>
-                                <Button
-                                    type="submit"
-                                    bsStyle="success"
-                                    className="pull-right"
-                                    disabled={busy}
-                                >
-                                    Login
-                                </Button>
-                            </FormGroup>
-                        </form>
-                    </div>
+                    <form onSubmit={this.handleSubmit}>
+                        <FormGroup>
+                            <ControlLabel>
+                                Email:
+                            </ControlLabel>
+                            <FormControl
+                                type="email"
+                                placeholder="john.doe@example.com"
+                                disabled={busy}
+                                onChange={this.handleEmailChange}
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <ControlLabel>
+                                Password:
+                            </ControlLabel>
+                            <FormControl
+                                type="password"
+                                placeholder="mystrongpassword123"
+                                disabled={busy}
+                                onChange={this.handlePasswordChange}
+                            />
+                        </FormGroup>
+                        <FormGroup>
+                            <Checkbox
+                                onChange={this.handleStayLoggedInChange}
+                                disabled={busy}
+                            >
+                                Remember me
+                            </Checkbox>
+                        </FormGroup>
+                        <FormGroup>
+                            <Button
+                                type="submit"
+                                bsStyle="success"
+                                className="pull-right"
+                                disabled={busy}
+                            >
+                                Login
+                            </Button>
+                        </FormGroup>
+                    </form>
                 </Col>
                 <Col md={4} />
             </Row>

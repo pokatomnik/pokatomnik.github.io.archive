@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 
 import { branch as userBranch, reducer as userReducer } from './models/user';
 import { branch as errorBranch, reducer as errorReducer } from './models/error';
+import { branch as pastasBranch, reducer as pastasReducer } from './models/pastas';
 import { branch as routerBranch } from './models/router';
 
 let composeEnhancers = compose;
@@ -18,6 +19,7 @@ export default (history) => {
             // my reducers
             [userBranch]: userReducer,
             [errorBranch]: errorReducer,
+            [pastasBranch]: pastasReducer,
             // router
             [routerBranch]: routerReducer,
         }),

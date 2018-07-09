@@ -7,6 +7,7 @@ import TopMenu from '../top-menu/top-menu';
 import bem from '../../utils/bem';
 import RouteAbout from '../route-about/route-about';
 import RouteLogin from '../route-login/route-login';
+import RouteRoot from '../route-root/route-root';
 import AutomaticAuthorizer from '../automatic-authorizer/automatic-authorizer';
 import ErrorModal from '../error-modal/error-modal';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
@@ -24,7 +25,7 @@ export default function Main() {
                     <Col md={1} />
                     <Col md={10}>
                         <Breadcrumbs />
-                        <Route exact path="/" component={null} />
+                        <Route exact path="/" component={RouteRoot} />
                         <Route exact path="/login" component={RouteLogin} />
                         <Route exact path="/profile" component={null} />
                         <Route exact path="/about" component={RouteAbout} />

@@ -20,7 +20,7 @@ export default function RouteAbout() {
                     Encrypted sharing service
                 </p>
                 <ButtonGroup className="pull-right">
-                    <Link component={Button} bsStyle="success" to="/pasta">
+                    <Link component={Button} bsStyle="success" to="/">
                         Try now
                     </Link>
                     <Link component={Button} bsStyle="success" to="/about">
