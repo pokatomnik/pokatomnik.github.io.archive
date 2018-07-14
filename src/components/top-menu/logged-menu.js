@@ -49,21 +49,19 @@ class LoggedMenu extends PureComponent {
         );
 
         return (
-            <Nav pullRight>
-                <NavDropdown title={`Hello, ${userName}`} id="loggedMenu">
-                    <MenuItem header>
-                        {userEmail}&nbsp;
-                        {supTextComponent}
-                    </MenuItem>
-                    <Link to="/my-pastas" component={MenuItem}>
-                        My Pastas
-                    </Link>
-                    <MenuItem divider/>
-                    <MenuItem onClick={this.logout}>
-                        Logout
-                    </MenuItem>
-                </NavDropdown>
-            </Nav>
+            <NavDropdown title={`Hello, ${userName}`} id="loggedMenu">
+                <MenuItem header>
+                    {userEmail}&nbsp;
+                    {supTextComponent}
+                </MenuItem>
+                <Link to="/my-pastas" component={MenuItem}>
+                    My Pastas
+                </Link>
+                <MenuItem divider/>
+                <MenuItem onClick={this.logout}>
+                    Logout
+                </MenuItem>
+            </NavDropdown>
         );
     }
 }

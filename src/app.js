@@ -8,6 +8,8 @@ import configureStore from './configureStore';
 import Main from './components/main/main';
 
 import './app.css';
+import './react-bootstrap-fixes.css';
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css'
 
 const history = createHistory({
     hashType: 'hashbang'
