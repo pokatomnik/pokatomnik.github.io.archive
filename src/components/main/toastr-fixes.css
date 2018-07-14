@@ -1,7 +1,7 @@
 .main .redux-toastr .toastr:hover {
-    box-shadow: 2px 2px 10px rgba(0,0,0,0.4);
-    -webkit-box-shadow: 2px 2px 10px rgba(0,0,0,0.4);
-    -moz-box-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.4) !important;
+    -webkit-box-shadow: 2px 2px 10px rgba(0,0,0,0.4) !important;
+    -moz-box-shadow: 2px 2px 10px rgba(0,0,0,0.4) !important;
 }
 
 .main .redux-toastr .toastr .rrt-left-container {

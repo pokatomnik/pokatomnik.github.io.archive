@@ -9,6 +9,7 @@ import bem from '../../utils/bem';
 import RouteAbout from '../route-about/route-about';
 import RouteLogin from '../route-login/route-login';
 import RouteRoot from '../route-root/route-root';
+import RoutePasta from '../route-pasta/route-pasta';
 import AutomaticAuthorizer from '../automatic-authorizer/automatic-authorizer';
 import ErrorModal from '../error-modal/error-modal';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
@@ -31,6 +32,7 @@ export default function Main() {
                         <Route exact path="/login" component={RouteLogin} />
                         <Route exact path="/profile" component={null} />
                         <Route exact path="/about" component={RouteAbout} />
+                        <Route exact path="/pasta/:id" component={RoutePasta} />
                     </Col>
                     <Col md={1} />
                 </Row>
@@ -43,7 +45,6 @@ export default function Main() {
                 position="bottom-right"
                 transitionIn="bounceInDown"
                 transitionOut="bounceOutUp"
-                progressBar
             />
         </div>
     );

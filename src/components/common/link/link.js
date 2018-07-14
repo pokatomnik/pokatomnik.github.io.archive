@@ -5,7 +5,7 @@ import { push } from 'react-router-redux';
 import omit from 'lodash.omit';
 
 
-const omitRenderPaths = ['to', 'push'];
+const omitRenderPaths = ['to', 'push', 'beforeGo'];
 
 class Link extends PureComponent {
     constructor(props) {
@@ -17,7 +17,9 @@ class Link extends PureComponent {
     handleClick(evt) {
         evt.stopPropagation();
         evt.preventDefault();
-        this.props.push(this.props.to);
+        const {push, beforeGo} = this.props;
+        beforeGo();
+        push(this.props.to);
     }
 
     render() {
@@ -42,7 +44,12 @@ Link.propTypes = {
         PropTypes.string.isRequired
     ]).isRequired,
     children: PropTypes.string.isRequired,
-    push: PropTypes.func.isRequired
+    push: PropTypes.func.isRequired,
+    beforeGo: PropTypes.func
+};
+
+Link.defaultProps = {
+    beforeGo: () => {}
 };
 
 const actionsMap = {push};

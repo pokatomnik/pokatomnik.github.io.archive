@@ -30,15 +30,19 @@ class CreatePasta extends PureComponent {
         createPasta: PropTypes.func.isRequired
     };
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
+    static getInitialState() {
+        return {
             name: '',
             text: '',
             encrypted: false,
             key: ''
         };
+    }
+
+    constructor(props) {
+        super(props);
+
+        this.state = CreatePasta.getInitialState();
 
         this.handleEncryptChange = this.handleEncryptChange.bind(this);
         this.handleKeyChange = this.handleKeyChange.bind(this);
@@ -93,6 +97,8 @@ class CreatePasta extends PureComponent {
             key
         } = this.state;
         this.props.createPasta(name, text, encrypted, key);
+
+        this.setState(CreatePasta.getInitialState());
     }
 
     validate() {

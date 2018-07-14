@@ -2,7 +2,7 @@ import React from 'react';
 
 import CreatePasta from '../create-pasta/create-pasta';
 
-export const BLOCK_NAME = 'route-root';
+const BLOCK_NAME = 'route-root';
 
 export default function RouteRoot() {
     return (

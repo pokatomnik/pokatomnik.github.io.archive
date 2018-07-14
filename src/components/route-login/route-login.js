@@ -3,7 +3,7 @@ import Login from '../login/login';
 import Alert from 'react-bootstrap/lib/Alert';
 
 
-export const BLOCK_NAME = 'route-login';
+const BLOCK_NAME = 'route-login';
 
 export default function RouteLogin() {
     return (
