@@ -8,6 +8,17 @@ import omit from 'lodash.omit';
 const omitRenderPaths = ['to', 'push', 'beforeGo'];
 
 class Link extends PureComponent {
+    static propTypes = {
+        to: PropTypes.string,
+        component: PropTypes.oneOfType([
+            PropTypes.func.isRequired,
+            PropTypes.string.isRequired
+        ]).isRequired,
+        children: PropTypes.string.isRequired,
+        push: PropTypes.func.isRequired,
+        beforeGo: PropTypes.func
+    };
+
     constructor(props) {
         super(props);
 
@@ -17,9 +28,12 @@ class Link extends PureComponent {
     handleClick(evt) {
         evt.stopPropagation();
         evt.preventDefault();
-        const {push, beforeGo} = this.props;
+        const {push, beforeGo, to} = this.props;
+        if (!to) {
+            return;
+        }
         beforeGo();
-        push(this.props.to);
+        push(to);
     }
 
     render() {
@@ -36,17 +50,6 @@ class Link extends PureComponent {
         );
     }
 }
-
-Link.propTypes = {
-    to: PropTypes.string.isRequired,
-    component: PropTypes.oneOfType([
-        PropTypes.func.isRequired,
-        PropTypes.string.isRequired
-    ]).isRequired,
-    children: PropTypes.string.isRequired,
-    push: PropTypes.func.isRequired,
-    beforeGo: PropTypes.func
-};
 
 Link.defaultProps = {
     beforeGo: () => {}

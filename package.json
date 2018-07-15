@@ -4,6 +4,7 @@
     "private": true,
     "dependencies": {
         "backendless": "^4.1.5",
+        "highlight.js": "^9.12.0",
         "history": "^4.7.2",
         "lodash.capitalize": "^4.2.1",
         "lodash.isobject": "^3.0.2",
@@ -13,7 +14,9 @@
         "react": "^15.4.2",
         "react-bootstrap": "^0.32.1",
         "react-dom": "^15.4.2",
+        "react-highlight": "^0.12.0",
         "react-icons": "^2.2.7",
+        "react-placeholder": "^3.0.1",
         "react-redux": "^5.0.7",
         "react-redux-toastr": "^7.3.0",
         "react-router": "^4.3.1",

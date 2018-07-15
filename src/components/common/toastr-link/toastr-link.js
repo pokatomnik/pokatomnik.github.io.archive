@@ -10,6 +10,13 @@ import {
 } from '../../../models/pastas';
 
 class ToastrLink extends PureComponent {
+    static propTypes = {
+        lastCreatedObjectId: PropTypes.string.isRequired,
+        lastCreatedName: PropTypes.string.isRequired,
+        removeLastCreatedPasta: PropTypes.func.isRequired,
+        remove: PropTypes.func.isRequired
+    };
+
     constructor(props) {
         super(props);
 
@@ -45,13 +52,6 @@ class ToastrLink extends PureComponent {
         );
     }
 }
-
-ToastrLink.propTypes = {
-    lastCreatedObjectId: PropTypes.string.isRequired,
-    lastCreatedName: PropTypes.string.isRequired,
-    removeLastCreatedPasta: PropTypes.func.isRequired,
-    remove: PropTypes.func.isRequired
-};
 
 const mapStateToProps = (state) => ({
     lastCreatedObjectId: selectLastCreatedObjectId(state),

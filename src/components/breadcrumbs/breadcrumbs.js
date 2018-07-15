@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Breadcrumb from 'react-bootstrap/lib/Breadcrumb';
-import capitalize from 'lodash/capitalize';
+import capitalize from 'lodash.capitalize';
 
 import { selectPathName } from '../../models/router';
 import Link from '../common/link/link';
@@ -30,13 +30,16 @@ class Breadcrumbs extends Component {
         ]
             .reduce((result, pathPart, index, pathParts) => {
                 const href = Breadcrumbs.createHref(index, pathParts);
+                // ToDo: fix this template string; replace this thing with dependent on the constant one
+                const hrefAttr = `/#!${href}`;
+                const active = href === this.props.pathName;
                 return [...result, (
                     <Link
                         key={href}
                         component={Breadcrumb.Item}
-                        to={href}
-                        href={`/#!${href}`}
-                        active={href === this.props.pathName}
+                        to={active ? null : href}
+                        href={hrefAttr}
+                        active={active}
                     >
                         {capitalize(pathPart)}
                     </Link>

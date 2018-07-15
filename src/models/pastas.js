@@ -9,17 +9,24 @@ import ToastrLink from '../components/common/toastr-link/toastr-link';
 export const branch = 'pastas';
 
 const initialState = {
+    /* data */
     lastPastas: [],
     currentPasta: null,
+    pastaDoesNotExists: false,
+
+    /* Async process flags */
     isLoadingPasta: false,
     isLoadingPastaList: false,
     isSavingPasta: false,
+
     /* Only for last created pasta */
     lastCreatedObjectId: undefined,
     lastCreatedName: undefined
 };
 
 /* selectors */
+export const selectPastaDoesNotExists = (state) => state[branch].pastaDoesNotExists;
+
 export const selectLastCreatedObjectId = (state) => state[branch].lastCreatedObjectId;
 
 export const selectLastCreatedName = (state) => state[branch].lastCreatedName;
@@ -30,7 +37,21 @@ export const selectIsLoadingPasta = (state) => state[branch].isLoadingPasta;
 
 export const selectIsLoadingPastaList = (state) => state[branch].isLoadingPastaList;
 
-export const selectCurrentPasta = (state) => state[branch].currentPasta;
+/* current pasta selectors */
+const selectCurrentPasta = (state) => state[branch].currentPasta;
+
+const selectCurrentPastaOrEmptyObject = (state) => selectCurrentPasta(state) || {};
+
+export const selectCurrentPastaName = (state) => selectCurrentPastaOrEmptyObject(state).name;
+
+export const selectCurrentPastaText = (state) => selectCurrentPastaOrEmptyObject(state).text;
+
+export const selectCurrentPastaOwnerId = (state) => selectCurrentPastaOrEmptyObject(state).ownerId;
+
+export const selectCurrentPastaCreated = (state) => selectCurrentPastaOrEmptyObject(state).created;
+
+export const selectCurrentPastaEncrypted = (state) => selectCurrentPastaOrEmptyObject(state).encrypted;
+/* end current pasta selectors */
 
 export const selectLastPastas = (state) => state[branch].lastPastas;
 
@@ -47,7 +68,17 @@ const appendPastasAction = createAction(`${branch}:appendPastas`);
 
 const setCurrentPastaAction = createAction(`${branch}:setCurrentPasta`);
 
+const setPastaDoesNotExistsAction = createAction(`${branch}:setPastaDoesNotExists`);
+
 /* async action creators */
+const setPastaDoesNotExists = () => (dispatch) => {
+    dispatch(setPastaDoesNotExistsAction(true));
+};
+
+const removePastaDoesNotExists = () => (dispatch) => {
+    dispatch(setPastaDoesNotExistsAction(false));
+};
+
 const setLastCreatedPasta = (lastCreatedObjectId, lastCreatedName) => (dispatch) => {
     dispatch(setLastCreatePastaAction({lastCreatedObjectId, lastCreatedName}));
 };
@@ -62,6 +93,22 @@ export const setCurrentPasta = (pasta) => (dispatch) => {
 
 export const removeCurrentPasta = () => (dispatch, getState) => {
     setCurrentPasta(null)(dispatch, getState);
+};
+
+export const loadPastaById = (id) => (dispatch, getState) => {
+    dispatch(setIsLoadingPastaAction(true));
+    removePastaDoesNotExists()(dispatch, getState);
+    Backendless.Data
+        .of('Pastas')
+        .findById(id)
+        .then((pasta) => {
+            dispatch(setIsLoadingPastaAction(false));
+            setCurrentPasta(pasta)(dispatch, getState);
+        })
+        .catch(() => {
+            dispatch(setIsLoadingPastaAction(false));
+            setPastaDoesNotExists()(dispatch, getState);
+        });
 };
 
 // This action creator does not have a reducer, so It is not change the store
