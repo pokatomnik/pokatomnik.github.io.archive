@@ -7,9 +7,10 @@ export default function MyHighlight(props) {
         children,
         ...restProps
     } = props;
+    const text = children ? children.toString() : '';
     return (
         <Highlight {...restProps}>
-            {children}
+            {text}
         </Highlight>
     );
 }

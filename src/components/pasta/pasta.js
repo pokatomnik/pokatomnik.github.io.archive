@@ -17,6 +17,11 @@ import {
 import { selectUserIsLoggedIn } from '../../models/user';
 import Placeholder from '../common/placeholder/placeholder';
 import Highlight from '../common/highlight/highlight';
+import bem from '../../utils/bem';
+import './pasta.css';
+
+
+const BLOCK_NAME = 'pasta';
 
 class Pasta extends PureComponent {
     static propTypes = {
@@ -52,6 +57,19 @@ class Pasta extends PureComponent {
         return encrypted ? 'Yes' : 'No';
     }
 
+    renderPastaText(text) {
+        if (!text) {
+            return (
+                <span />
+            );
+        }
+        return (
+            <Highlight>
+                {text}
+            </Highlight>
+        );
+    }
+
     render() {
         const {
             isLoadingPasta,
@@ -66,7 +84,7 @@ class Pasta extends PureComponent {
             <Row>
                 <Col md={8}>
                     <Panel>
-                        <Panel.Heading>
+                        <Panel.Heading className={bem(BLOCK_NAME, 'name-header').toString()}>
                             <Placeholder
                                 type="textRow"
                                 ready={ready}
@@ -76,15 +94,13 @@ class Pasta extends PureComponent {
                                 </span>
                             </Placeholder>
                         </Panel.Heading>
-                        <Panel.Body>
+                        <Panel.Body className={bem(BLOCK_NAME, 'text-view').toString()}>
                             <Placeholder
                                 type="text"
                                 ready={ready}
                                 rows={10}
                             >
-                                <Highlight>
-                                    {currentPastaText}
-                                </Highlight>
+                                {this.renderPastaText(currentPastaText)}
                             </Placeholder>
                         </Panel.Body>
                     </Panel>

@@ -1,0 +1,14 @@
+.pasta__name-header > .text-row {
+    margin-top: 0.5em !important;
+}
+
+.pasta__text-view {
+    background: #f8f8f8;
+}
+
+.pasta__text-view > pre {
+    padding: 0;
+    background: transparent;
+    border: transparent;
+    border-radius: 0;
+}
