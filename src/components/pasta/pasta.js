@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
-import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import Panel from 'react-bootstrap/lib/Panel';
 
 import {
@@ -49,6 +48,10 @@ class Pasta extends PureComponent {
         this.props.loadPastaById(objectId);
     }
 
+    renderEncrypted(encrypted) {
+        return encrypted ? 'Yes' : 'No';
+    }
+
     render() {
         const {
             isLoadingPasta,
@@ -62,28 +65,31 @@ class Pasta extends PureComponent {
         return (
             <Row>
                 <Col md={8}>
-                    <Placeholder
-                        type="textRow"
-                        ready={ready}
-                    >
-                        <ControlLabel>
-                            {currentPastaName}
-                        </ControlLabel>
-                    </Placeholder>
-                    <Placeholder
-                        type="text"
-                        ready={ready}
-                        rows={10}
-                    >
-                        <Highlight>
-                            {currentPastaText}
-                        </Highlight>
-                    </Placeholder>
+                    <Panel>
+                        <Panel.Heading>
+                            <Placeholder
+                                type="textRow"
+                                ready={ready}
+                            >
+                                <span>
+                                    {currentPastaName}
+                                </span>
+                            </Placeholder>
+                        </Panel.Heading>
+                        <Panel.Body>
+                            <Placeholder
+                                type="text"
+                                ready={ready}
+                                rows={10}
+                            >
+                                <Highlight>
+                                    {currentPastaText}
+                                </Highlight>
+                            </Placeholder>
+                        </Panel.Body>
+                    </Panel>
                 </Col>
                 <Col md={4}>
-                    <ControlLabel>
-                        Pasta Info
-                    </ControlLabel>
                     <Panel>
                         <Panel.Heading>
                             Author:
@@ -93,9 +99,9 @@ class Pasta extends PureComponent {
                                 type="textRow"
                                 ready={ready}
                             >
-                                <div>
+                                <span>
                                     {currentPastaOwnerId}
-                                </div>
+                                </span>
                             </Placeholder>
                         </Panel.Body>
                     </Panel>
@@ -108,9 +114,24 @@ class Pasta extends PureComponent {
                                 type="textRow"
                                 ready={ready}
                             >
-                                <div>
+                                <span>
                                     {currentPastaCreated}
-                                </div>
+                                </span>
+                            </Placeholder>
+                        </Panel.Body>
+                    </Panel>
+                    <Panel>
+                        <Panel.Heading>
+                            Encrypted
+                        </Panel.Heading>
+                        <Panel.Body>
+                            <Placeholder
+                                type="textRow"
+                                ready={ready}
+                            >
+                                <span>
+                                    {this.renderEncrypted(currentPastaEncrypted)}
+                                </span>
                             </Placeholder>
                         </Panel.Body>
                     </Panel>

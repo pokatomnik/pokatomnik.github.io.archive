@@ -21,31 +21,32 @@ const BLOCK_CLASS = 'main';
 export default function Main() {
     return (
         <div className={bem(BLOCK_CLASS)}>
-            <AutomaticAuthorizer />
             <TopMenu />
-            <div className="container">
-                <Row>
-                    <Col md={1} />
-                    <Col md={10}>
-                        <Breadcrumbs />
-                        <Route exact path="/" component={RouteRoot} />
-                        <Route exact path="/login" component={RouteLogin} />
-                        <Route exact path="/profile" component={null} />
-                        <Route exact path="/about" component={RouteAbout} />
-                        <Route exact path="/pasta/:id" component={RoutePasta} />
-                    </Col>
-                    <Col md={1} />
-                </Row>
-            </div>
-            <ErrorModal />
-            <ReduxToastr
-                timeOut={4000}
-                newestOnTop
-                preventDuplicates={false}
-                position="bottom-right"
-                transitionIn="bounceInDown"
-                transitionOut="bounceOutUp"
-            />
+            <AutomaticAuthorizer>
+                <div className="container">
+                    <Row>
+                        <Col md={1} />
+                        <Col md={10}>
+                            <Breadcrumbs />
+                            <Route exact path="/" component={RouteRoot} />
+                            <Route exact path="/login" component={RouteLogin} />
+                            <Route exact path="/profile" component={null} />
+                            <Route exact path="/about" component={RouteAbout} />
+                            <Route exact path="/pasta/:id" component={RoutePasta} />
+                        </Col>
+                        <Col md={1} />
+                    </Row>
+                </div>
+                <ErrorModal />
+                <ReduxToastr
+                    timeOut={4000}
+                    newestOnTop
+                    preventDuplicates={false}
+                    position="bottom-right"
+                    transitionIn="bounceInDown"
+                    transitionOut="bounceOutUp"
+                />
+            </AutomaticAuthorizer>
         </div>
     );
 }

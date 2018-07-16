@@ -13,7 +13,7 @@ export default function MyPlaceholder(props) {
         ...restProps
     } = props;
     return (
-        <Placeholder {...restProps}>
+        <Placeholder {...restProps} showLoadingAnimation>
             {children}
         </Placeholder>
     );
