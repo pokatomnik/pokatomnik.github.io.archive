@@ -6,6 +6,7 @@ import capitalize from 'lodash.capitalize';
 
 import { selectPathName } from '../../models/router';
 import Link from '../common/link/link';
+import BreadcrumbText from './breadcrumb-text';
 
 
 class Breadcrumbs extends Component {
@@ -41,7 +42,12 @@ class Breadcrumbs extends Component {
                         href={hrefAttr}
                         active={active}
                     >
-                        {capitalize(pathPart)}
+                        <BreadcrumbText
+                            to={href}
+                            index={index}
+                        >
+                            {capitalize(pathPart)}
+                        </BreadcrumbText>
                     </Link>
                 ), ' '];
             }, []);

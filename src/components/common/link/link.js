@@ -14,7 +14,10 @@ class Link extends PureComponent {
             PropTypes.func.isRequired,
             PropTypes.string.isRequired
         ]).isRequired,
-        children: PropTypes.string.isRequired,
+        children: PropTypes.oneOfType([
+            PropTypes.node.isRequired,
+            PropTypes.arrayOf(PropTypes.node.isRequired).isRequired
+        ]),
         push: PropTypes.func.isRequired,
         beforeGo: PropTypes.func
     };
