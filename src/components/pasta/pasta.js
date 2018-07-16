@@ -99,7 +99,7 @@ class Pasta extends PureComponent {
                             <Placeholder
                                 type="text"
                                 ready={ready}
-                                rows={10}
+                                rows={12}
                             >
                                 {this.renderPastaText(currentPastaText)}
                             </Placeholder>

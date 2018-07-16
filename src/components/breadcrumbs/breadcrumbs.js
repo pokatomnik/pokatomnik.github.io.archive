@@ -46,7 +46,7 @@ class Breadcrumbs extends Component {
                             to={href}
                             index={index}
                         >
-                            {capitalize(pathPart)}
+                            {capitalize(pathPart.split('-').join(' '))}
                         </BreadcrumbText>
                     </Link>
                 ), ' '];
