@@ -12,3 +12,7 @@
     border: transparent;
     border-radius: 0;
 }
+
+.pasta__text-container {
+    white-space: pre;
+}

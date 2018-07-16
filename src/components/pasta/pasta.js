@@ -18,6 +18,7 @@ import { selectUserIsLoggedIn } from '../../models/user';
 import Placeholder from '../common/placeholder/placeholder';
 import Highlight from '../common/highlight/highlight';
 import bem from '../../utils/bem';
+import dateTime from '../../utils/date-time';
 import './pasta.css';
 
 
@@ -64,7 +65,7 @@ class Pasta extends PureComponent {
             );
         }
         return (
-            <Highlight>
+            <Highlight className={bem(BLOCK_NAME, 'text-container')}>
                 {text}
             </Highlight>
         );
@@ -131,7 +132,7 @@ class Pasta extends PureComponent {
                                 ready={ready}
                             >
                                 <span>
-                                    {currentPastaCreated}
+                                    {dateTime(currentPastaCreated)}
                                 </span>
                             </Placeholder>
                         </Panel.Body>
