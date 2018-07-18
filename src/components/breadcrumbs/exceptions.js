@@ -13,5 +13,15 @@ export default [{
         path: '/pasta/:id',
         exact: true
     },
-    getUpdatedText: ({pastaName}) => pastaName || 'Loading...'
+    getUpdatedText: ({pastaName, isLoadingPasta}) => {
+        if (pastaName) {
+            return pastaName;
+        }
+
+        if (isLoadingPasta) {
+            return 'Loading...';
+        }
+
+        return '😥'
+    }
 }];

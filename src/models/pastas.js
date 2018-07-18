@@ -12,7 +12,7 @@ const initialState = {
     /* data */
     lastPastas: [],
     currentPasta: null,
-    pastaDoesNotExists: false,
+    pastaFetchError: null,
 
     /* Async process flags */
     isLoadingPasta: false,
@@ -25,7 +25,7 @@ const initialState = {
 };
 
 /* selectors */
-export const selectPastaDoesNotExists = (state) => state[branch].pastaDoesNotExists;
+export const selectPastaFetchError = (state) => state[branch].pastaFetchError;
 
 export const selectLastCreatedObjectId = (state) => state[branch].lastCreatedObjectId;
 
@@ -52,7 +52,7 @@ export const selectCurrentPastaCreated = (state) => selectCurrentPastaOrEmptyObj
 
 export const selectCurrentPastaEncrypted = (state) => selectCurrentPastaOrEmptyObject(state).encrypted;
 
-export const selectCurrentPastaOwner = (state) => selectCurrentPastaOrEmptyObject(state).user;
+export const selectCurrentPastaOwner = (state) => selectCurrentPastaOrEmptyObject(state).currentPastaOwner;
 /* end current pasta selectors */
 
 export const selectLastPastas = (state) => state[branch].lastPastas;
@@ -70,15 +70,15 @@ const appendPastasAction = createAction(`${branch}:appendPastas`);
 
 const setCurrentPastaAction = createAction(`${branch}:setCurrentPasta`);
 
-const setPastaDoesNotExistsAction = createAction(`${branch}:setPastaDoesNotExists`);
+const setPastaFetchErrorAction = createAction(`${branch}:setPastaFetchError`);
 
 /* async action creators */
-const setPastaDoesNotExists = () => (dispatch) => {
-    dispatch(setPastaDoesNotExistsAction(true));
+const setPastaFetchError = (error) => (dispatch) => {
+    dispatch(setPastaFetchErrorAction(error));
 };
 
-const removePastaDoesNotExists = () => (dispatch) => {
-    dispatch(setPastaDoesNotExistsAction(false));
+const removePastaFetchError = () => (dispatch) => {
+    dispatch(setPastaFetchErrorAction());
 };
 
 const setLastCreatedPasta = (lastCreatedObjectId, lastCreatedName) => (dispatch) => {
@@ -99,7 +99,7 @@ export const removeCurrentPasta = () => (dispatch, getState) => {
 
 export const loadPastaById = (id) => (dispatch, getState) => {
     dispatch(setIsLoadingPastaAction(true));
-    removePastaDoesNotExists()(dispatch, getState);
+    removePastaFetchError()(dispatch, getState);
     Backendless.Data
         .of('Pastas')
         .findById(id)
@@ -113,13 +113,20 @@ export const loadPastaById = (id) => (dispatch, getState) => {
                 ]);
         })
         .then(([pasta, user]) => {
-            pasta.user = user;
+            pasta.currentPastaOwner = user;
             dispatch(setIsLoadingPastaAction(false));
             setCurrentPasta(pasta)(dispatch, getState);
         })
-        .catch(() => {
+        .catch(({
+            status: title,
+            message
+        }) => {
             dispatch(setIsLoadingPastaAction(false));
-            setPastaDoesNotExists()(dispatch, getState);
+            removeCurrentPasta()(dispatch, getState);
+            setPastaFetchError({
+                title: `${title}!`,
+                message
+            })(dispatch, getState);
         });
 };
 
@@ -202,5 +209,10 @@ export const reducer = handleActions({
         ...state,
         lastCreatedObjectId,
         lastCreatedName
+    }),
+
+    [setPastaFetchErrorAction]: (state, {payload: pastaFetchError}) => ({
+        ...state,
+        pastaFetchError
     })
 }, initialState);

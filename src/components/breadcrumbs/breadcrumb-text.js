@@ -4,13 +4,17 @@ import { connect } from 'react-redux';
 import { matchPath } from 'react-router';
 import find from 'lodash.find';
 
-import {selectCurrentPastaName } from '../../models/pastas';
+import {
+    selectCurrentPastaName,
+    selectIsLoadingPasta
+} from '../../models/pastas';
 import exceptions from './exceptions';
 
 
 BreadcrumbText.propTypes = {
     /* from redux */
     pastaName: PropTypes.string,
+    isLoadingPasta: PropTypes.bool.isRequired,
 
     /* common props */
     children: PropTypes.node.isRequired,
@@ -45,7 +49,8 @@ function BreadcrumbText(props) {
 }
 
 const mapStateToProps = (state) => ({
-    pastaName: selectCurrentPastaName(state)
+    pastaName: selectCurrentPastaName(state),
+    isLoadingPasta: selectIsLoadingPasta(state)
 });
 
 export default connect(mapStateToProps)(BreadcrumbText);

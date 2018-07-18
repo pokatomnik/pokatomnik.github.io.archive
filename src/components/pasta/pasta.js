@@ -14,7 +14,8 @@ import {
     selectCurrentPastaOwnerId,
     selectCurrentPastaCreated,
     selectCurrentPastaOwner,
-    removeCurrentPasta
+    removeCurrentPasta,
+    selectPastaFetchError
 } from '../../models/pastas';
 import { selectUserIsLoggedIn } from '../../models/user';
 import Placeholder from '../common/placeholder/placeholder';
@@ -23,6 +24,7 @@ import bem from '../../utils/bem';
 import dateTime from '../../utils/date-time';
 import './pasta.css';
 import Link from '../common/link/link';
+import Error from '../error/error';
 
 
 const BLOCK_NAME = 'pasta';
@@ -48,6 +50,10 @@ class Pasta extends PureComponent {
             email: PropTypes.string.isRequired,
             objectId: PropTypes.string.isRequired,
             updated: PropTypes.number,
+        }),
+        pastaFetchError: PropTypes.shape({
+            title: PropTypes.string.isRequired,
+            message: PropTypes.string.isRequired
         }),
         removeCurrentPasta: PropTypes.func.isRequired
     };
@@ -99,9 +105,28 @@ class Pasta extends PureComponent {
             currentPastaEncrypted,
             currentPastaOwnerId,
             currentPastaCreated,
-            currentPastaOwner
+            currentPastaOwner,
+            pastaFetchError
         } = this.props;
         const ready = !isLoadingPasta;
+        if (pastaFetchError) {
+            return (
+                <Error
+                    title={pastaFetchError.title}
+                    message={pastaFetchError.message}
+                >
+                    Pasta is not accessible. Try to&nbsp;
+                    <Link
+                        to="/"
+                        component="a"
+                        href="/"
+                    >
+                        create
+                    </Link>&nbsp;a new one.
+                </Error>
+            );
+        }
+
         return (
             <Row>
                 <Col md={8}>
@@ -202,7 +227,8 @@ const mapStateToProps = (state) => ({
     currentPastaCreated: selectCurrentPastaCreated(state),
     userIsLoggedIn: selectUserIsLoggedIn(state),
     isLoadingPasta: selectIsLoadingPasta(state),
-    currentPastaOwner: selectCurrentPastaOwner(state)
+    currentPastaOwner: selectCurrentPastaOwner(state),
+    pastaFetchError: selectPastaFetchError(state)
 });
 
 const actionsMap = {loadPastaById, removeCurrentPasta};
