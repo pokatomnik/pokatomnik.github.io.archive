@@ -51,6 +51,8 @@ export const selectCurrentPastaOwnerId = (state) => selectCurrentPastaOrEmptyObj
 export const selectCurrentPastaCreated = (state) => selectCurrentPastaOrEmptyObject(state).created;
 
 export const selectCurrentPastaEncrypted = (state) => selectCurrentPastaOrEmptyObject(state).encrypted;
+
+export const selectCurrentPastaOwner = (state) => selectCurrentPastaOrEmptyObject(state).user;
 /* end current pasta selectors */
 
 export const selectLastPastas = (state) => state[branch].lastPastas;
@@ -102,6 +104,16 @@ export const loadPastaById = (id) => (dispatch, getState) => {
         .of('Pastas')
         .findById(id)
         .then((pasta) => {
+            /* fetch user */
+            return Promise.all([
+                pasta,
+                Backendless.Data
+                    .of('Users')
+                    .findById(pasta.ownerId)
+                ]);
+        })
+        .then(([pasta, user]) => {
+            pasta.user = user;
             dispatch(setIsLoadingPastaAction(false));
             setCurrentPasta(pasta)(dispatch, getState);
         })

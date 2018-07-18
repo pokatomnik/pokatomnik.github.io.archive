@@ -12,7 +12,9 @@ import {
     selectCurrentPastaText,
     selectCurrentPastaEncrypted,
     selectCurrentPastaOwnerId,
-    selectCurrentPastaCreated
+    selectCurrentPastaCreated,
+    selectCurrentPastaOwner,
+    removeCurrentPasta
 } from '../../models/pastas';
 import { selectUserIsLoggedIn } from '../../models/user';
 import Placeholder from '../common/placeholder/placeholder';
@@ -20,6 +22,7 @@ import Highlight from '../common/highlight/highlight';
 import bem from '../../utils/bem';
 import dateTime from '../../utils/date-time';
 import './pasta.css';
+import Link from '../common/link/link';
 
 
 const BLOCK_NAME = 'pasta';
@@ -33,13 +36,30 @@ class Pasta extends PureComponent {
         currentPastaCreated: PropTypes.number,
         userIsLoggedIn: PropTypes.bool.isRequired,
         isLoadingPasta: PropTypes.bool.isRequired,
-        loadPastaById: PropTypes.func.isRequired
+        loadPastaById: PropTypes.func.isRequired,
+        currentPastaOwner: PropTypes.shape({
+            lastLogin: PropTypes.number.isRequired,
+            userStatus: PropTypes.string.isRequired,
+            created: PropTypes.number.isRequired,
+            name: PropTypes.string.isRequired,
+            isAdmin: PropTypes.bool.isRequired,
+            ownerId: PropTypes.string.isRequired,
+            socialAccount: PropTypes.string.isRequired,
+            email: PropTypes.string.isRequired,
+            objectId: PropTypes.string.isRequired,
+            updated: PropTypes.number,
+        }),
+        removeCurrentPasta: PropTypes.func.isRequired
     };
 
     componentDidMount() {
         if (this.props.userIsLoggedIn) {
             this.handleNewObjectId(this.props);
         }
+    }
+
+    componentWillUnmount() {
+        this.props.removeCurrentPasta()
     }
 
     componentWillReceiveProps(newProps) {
@@ -78,7 +98,8 @@ class Pasta extends PureComponent {
             currentPastaText,
             currentPastaEncrypted,
             currentPastaOwnerId,
-            currentPastaCreated
+            currentPastaCreated,
+            currentPastaOwner
         } = this.props;
         const ready = !isLoadingPasta;
         return (
@@ -117,7 +138,22 @@ class Pasta extends PureComponent {
                                 ready={ready}
                             >
                                 <span>
-                                    {currentPastaOwnerId}
+                                    {
+                                        currentPastaOwner && (
+                                            <span>
+                                                {currentPastaOwner.name}
+                                                &nbsp;(
+                                                <Link
+                                                    to={`/user/${currentPastaOwnerId}`}
+                                                    component="a"
+                                                    href={`/user/${currentPastaOwnerId}`}
+                                                >
+                                                    View profile
+                                                </Link>
+                                                )
+                                            </span>
+                                        )
+                                    }
                                 </span>
                             </Placeholder>
                         </Panel.Body>
@@ -165,9 +201,10 @@ const mapStateToProps = (state) => ({
     currentPastaOwnerId: selectCurrentPastaOwnerId(state),
     currentPastaCreated: selectCurrentPastaCreated(state),
     userIsLoggedIn: selectUserIsLoggedIn(state),
-    isLoadingPasta: selectIsLoadingPasta(state)
+    isLoadingPasta: selectIsLoadingPasta(state),
+    currentPastaOwner: selectCurrentPastaOwner(state)
 });
 
-const actionsMap = {loadPastaById};
+const actionsMap = {loadPastaById, removeCurrentPasta};
 
 export default connect(mapStateToProps, actionsMap)(Pasta);
