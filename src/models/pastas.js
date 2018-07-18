@@ -1,10 +1,11 @@
 import { createAction, handleActions } from 'redux-actions';
 import Backendless from 'backendless';
 import { actions as toastrActions } from 'react-redux-toastr';
-import { developerEmail } from '../constants';
 
+import { developerEmail } from '../constants';
 import { setError } from './error';
 import ToastrLink from '../components/common/toastr-link/toastr-link';
+import { encrypt } from '../utils/encryption';
 
 export const branch = 'pastas';
 
@@ -130,8 +131,9 @@ export const loadPastaById = (id) => (dispatch, getState) => {
         });
 };
 
-// This action creator does not have a reducer, so It is not change the store
-export const createPasta = (name, text, encrypted, key) => (dispatch, getState) => {
+// This action creator does not have a reducer, so It does not change the store
+export const createPasta = (name, rawText, encrypted, key) => (dispatch, getState) => {
+    const text = encrypted ? encrypt(rawText, key) : rawText;
     dispatch(setIsSavingPastaAction(true));
     const goodName = name ? name : 'Unnamed';
     Backendless.Data
