@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route, Redirect, Switch } from 'react-router';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import ReduxToastr from 'react-redux-toastr'
@@ -32,6 +32,9 @@ export default function Main() {
                             <Route exact path="/login" component={RouteLogin} />
                             <Route exact path="/profile" component={null} />
                             <Route exact path="/about" component={RouteAbout} />
+                            <Switch>
+                                <Redirect exact from="/pasta" to="/"/>
+                            </Switch>
                             <Route exact path="/pasta/:id" component={RoutePasta} />
                         </Col>
                         <Col md={1} />
