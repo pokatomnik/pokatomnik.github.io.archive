@@ -2,12 +2,6 @@
     resize: vertical;
 }
 
-.create-pasta .create-pasta__encrypt-toggler[type="checkbox"] {
-    /* vertical center */
-    margin-top: 4px;
-    cursor: pointer;
-}
-
 .create-pasta__encrypt-toggler-wrapper {
     cursor: pointer;
 }
