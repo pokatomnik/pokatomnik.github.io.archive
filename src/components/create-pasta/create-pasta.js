@@ -14,6 +14,7 @@ import Tooltip from 'react-bootstrap/lib/Tooltip';
 import bem from '../../utils/bem';
 import { setError } from '../../models/error';
 import { createPasta } from '../../models/pastas';
+import FuckAutocomplete from '../common/fuck-autocomplete/fuck-autocomplete';
 import './create-pasta.css';
 
 const BLOCK_NAME = 'create-pasta';
@@ -118,16 +119,8 @@ class CreatePasta extends PureComponent {
                     autoComplete="off"
                     onSubmit={this.handleSubmitForm}
                 >
-                    <input
-                        type="text"
-                        name="fakeusernameremembered"
-                        className={bem(BLOCK_NAME, 'fuck-autocomplete')}
-                    />
-                    <input
-                        type="password"
-                        name="fakepasswordremembered"
-                        className={bem(BLOCK_NAME, 'fuck-autocomplete')}
-                    />
+                    <FuckAutocomplete type="text" />
+                    <FuckAutocomplete type="password" />
                     <Col md={8}>
                         <FormGroup>
                             <ControlLabel>
