@@ -88,7 +88,7 @@ class CreatePasta extends PureComponent {
         const error = this.validate();
         if (error) {
             const {title, message} = this.validate();
-            return this.prop.setError(title, message);
+            return this.props.setError(title, message);
         }
 
         const {
