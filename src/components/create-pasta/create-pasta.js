@@ -10,12 +10,15 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
+import { actions as toastrActions } from 'react-redux-toastr';
 
 import bem from '../../utils/bem';
 import { setError } from '../../models/error';
-import { createPasta } from '../../models/pastas';
 import FuckAutocomplete from '../common/fuck-autocomplete/fuck-autocomplete';
+import {dataToUrl} from '../../utils/create-url';
+import { developerEmail } from '../../constants';
 import './create-pasta.css';
+import Link from '../common/link/link';
 
 const BLOCK_NAME = 'create-pasta';
 const trigger = ['hover'];
@@ -28,7 +31,7 @@ const overlayTooltip = (
 class CreatePasta extends PureComponent {
     static propTypes = {
         setError: PropTypes.func.isRequired,
-        createPasta: PropTypes.func.isRequired
+        addToastr: PropTypes.func.isRequired
     };
 
     static getInitialState() {
@@ -50,7 +53,6 @@ class CreatePasta extends PureComponent {
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleToggleEncryption = this.handleToggleEncryption.bind(this);
-        this.handleSelectAll = this.handleSelectAll.bind(this);
         this.handleSubmitForm = this.handleSubmitForm.bind(this);
     }
 
@@ -76,7 +78,7 @@ class CreatePasta extends PureComponent {
         });
     }
 
-    handleSelectAll({target}) {
+    static handleSelectAll({target}) {
         target.select();
     }
 
@@ -87,17 +89,35 @@ class CreatePasta extends PureComponent {
         }
         const error = this.validate();
         if (error) {
-            const {title, message} = this.validate();
+            const {title, message} = error;
             return this.props.setError(title, message);
         }
 
-        const {
-            name,
-            text,
-            encrypted,
-            key
-        } = this.state;
-        this.props.createPasta(name, text, encrypted, key);
+        const {name, text, key} = this.state;
+        dataToUrl(name, text, key)
+            .then((compressed) => {
+                const url = `/pasta/${compressed}`;
+                this.props.addToastr({
+                    type: 'light',
+                    title: 'A new Pasta has been created',
+                    message: (
+                        <span>
+                            Click&nbsp;
+                            <Link to={url} href={url}>
+                                here
+                            </Link>&nbsp;
+                            to see It.
+                        </span>
+                    ),
+                    options: {
+                        showCloseButton: true, // true by default
+                    }
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+                this.props.setError('Error creating', `Please report error to ${developerEmail}`);
+            });
 
         this.setState(CreatePasta.getInitialState());
     }
@@ -131,7 +151,7 @@ class CreatePasta extends PureComponent {
                                 placeholder="My new great pasta"
                                 value={this.state.name}
                                 onChange={this.handleNameChange}
-                                onFocus={this.handleSelectAll}
+                                onFocus={CreatePasta.handleSelectAll}
                             />
                         </FormGroup>
 
@@ -200,7 +220,7 @@ class CreatePasta extends PureComponent {
 
 const actionsMap = {
     setError,
-    createPasta
+    addToastr: toastrActions.add
 };
 
 export default connect(null, actionsMap)(CreatePasta);

@@ -13,13 +13,18 @@ class Link extends PureComponent {
         component: PropTypes.oneOfType([
             PropTypes.func.isRequired,
             PropTypes.string.isRequired
-        ]).isRequired,
+        ]),
         children: PropTypes.oneOfType([
             PropTypes.node.isRequired,
             PropTypes.arrayOf(PropTypes.node.isRequired).isRequired
         ]),
         push: PropTypes.func.isRequired,
         beforeGo: PropTypes.func
+    };
+
+    static defaultProps = {
+        component: 'a',
+        beforeGo: () => {}
     };
 
     constructor(props) {
@@ -41,22 +46,18 @@ class Link extends PureComponent {
 
     render() {
         const {
-            component: Component,
+            component,
             children: text,
             ...restProps
         } = omit(this.props, omitRenderPaths);
 
         return React.createElement(
-            Component,
+            component,
             {onClick: this.handleClick, ...restProps},
             text
         );
     }
 }
-
-Link.defaultProps = {
-    beforeGo: () => {}
-};
 
 const actionsMap = {push};
 

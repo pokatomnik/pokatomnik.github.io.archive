@@ -1,133 +1,111 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
+import Panel from 'react-bootstrap/lib/Panel';
+import Button from 'react-bootstrap/lib/Button';
 
-import {
-    loadPastaById,
-    selectIsLoadingPasta,
-    selectCurrentPastaName,
-    selectCurrentPastaText,
-    selectCurrentPastaEncrypted,
-    selectCurrentPastaOwnerId,
-    selectCurrentPastaCreated,
-    selectCurrentPastaOwner,
-    removeCurrentPasta,
-    selectPastaFetchError
-} from '../../models/pastas';
-import { selectUserIsLoggedIn } from '../../models/user';
-import './pasta.css';
-import Link from '../common/link/link';
-import Error from '../error/error';
-import PastaData from './pasta-data';
+import bem from '../../utils/bem';
+import { BLOCK_NAME } from './constants';
+import Highlight from '../common/highlight/highlight';
+import DecryptInput from './decrypt-input';
 
 
-class Pasta extends PureComponent {
+export default class Pasta extends Component {
     static propTypes = {
-        currentPastaName: PropTypes.string,
-        currentPastaText: PropTypes.string,
-        currentPastaEncrypted: PropTypes.bool,
-        currentPastaOwnerId: PropTypes.string,
-        currentPastaCreated: PropTypes.number,
-        userIsLoggedIn: PropTypes.bool.isRequired,
-        isLoadingPasta: PropTypes.bool.isRequired,
-        loadPastaById: PropTypes.func.isRequired,
-        currentPastaOwner: PropTypes.shape({
-            lastLogin: PropTypes.number.isRequired,
-            userStatus: PropTypes.string.isRequired,
-            created: PropTypes.number.isRequired,
-            name: PropTypes.string.isRequired,
-            isAdmin: PropTypes.bool.isRequired,
-            ownerId: PropTypes.string.isRequired,
-            socialAccount: PropTypes.string.isRequired,
-            email: PropTypes.string.isRequired,
-            objectId: PropTypes.string.isRequired,
-            updated: PropTypes.number,
-        }),
-        pastaFetchError: PropTypes.shape({
-            title: PropTypes.string.isRequired,
-            message: PropTypes.string.isRequired
-        }),
-        removeCurrentPasta: PropTypes.func.isRequired
+        name: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+        encrypted: PropTypes.bool.isRequired
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            text: undefined,
+            decrypted: true
+        };
+
+        this.onDecrypt = this.onDecrypt.bind(this);
+        this.handleTryNewPassword = this.handleTryNewPassword.bind(this);
+    }
+
     componentDidMount() {
-        if (this.props.userIsLoggedIn) {
-            this.handleNewObjectId(this.props);
+        this.handleNewProps(this.props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.handleNewProps(nextProps);
+    }
+
+    handleNewProps({
+        text,
+        encrypted
+    }) {
+        this.setState({
+            text,
+            decrypted: !encrypted
+        });
+    }
+
+    handleTryNewPassword() {
+        this.setState({decrypted: false});
+    }
+
+    onDecrypt(text) {
+        this.setState({
+            text,
+            decrypted: true
+        });
+    }
+
+    renderPastaText() {
+        if (!this.state.decrypted) {
+            return (
+                <DecryptInput
+                    encryptedText={this.props.text}
+                    onDecrypt={this.onDecrypt}
+                />
+            )
         }
-    }
 
-    componentWillUnmount() {
-        this.props.removeCurrentPasta()
-    }
-
-    componentWillReceiveProps(newProps) {
-        const objectIdChanged = newProps.objectId !== this.props.objectId;
-        const userBecomeLoggedIn = newProps.userIsLoggedIn && !this.props.userIsLoggedIn;
-        if (objectIdChanged || userBecomeLoggedIn) {
-            this.handleNewObjectId(newProps);
-        }
-    }
-
-    handleNewObjectId({objectId}) {
-        this.props.loadPastaById(objectId);
+        return (
+            <Highlight className={bem(BLOCK_NAME, 'text-container')}>
+                {this.state.text}
+            </Highlight>
+        );
     }
 
     render() {
         const {
-            isLoadingPasta,
-            currentPastaName,
-            currentPastaText,
-            currentPastaEncrypted,
-            currentPastaOwnerId,
-            currentPastaCreated,
-            currentPastaOwner,
-            pastaFetchError
+            name,
+            encrypted
         } = this.props;
-        const ready = !isLoadingPasta;
-        if (pastaFetchError) {
-            return (
-                <Error
-                    title={pastaFetchError.title}
-                    message={pastaFetchError.message}
-                >
-                    Pasta is not accessible. Try to&nbsp;
-                    <Link
-                        to="/"
-                        component="a"
-                        href="/"
-                    >
-                        create
-                    </Link>&nbsp;a new one.
-                </Error>
-            );
-        }
 
         return (
-            <PastaData
-                currentPastaCreated={currentPastaCreated}
-                currentPastaEncrypted={currentPastaEncrypted}
-                currentPastaName={currentPastaName}
-                currentPastaOwner={currentPastaOwner}
-                currentPastaOwnerId={currentPastaOwnerId}
-                currentPastaText={currentPastaText}
-                ready={ready}
-            />
+            <Row>
+                <Col md={12}>
+                    <Panel>
+                        <Panel.Heading className={bem(BLOCK_NAME, 'name-header').toString()}>
+                            {name}
+                            {(encrypted && this.state.decrypted) && (
+                                <span className="pull-right">
+                                    Looks bad?&nbsp;
+                                    <Button
+                                        bsSize="xsmall"
+                                        bsStyle="primary"
+                                        onClick={this.handleTryNewPassword}
+                                    >
+                                            Try new key
+                                    </Button>
+                                </span>
+                            )}
+                        </Panel.Heading>
+                        <Panel.Body className={bem(BLOCK_NAME, 'text-view').toString()}>
+                            {this.renderPastaText()}
+                        </Panel.Body>
+                    </Panel>
+                </Col>
+            </Row>
         );
     }
 }
-
-const mapStateToProps = (state) => ({
-    currentPastaName: selectCurrentPastaName(state),
-    currentPastaText: selectCurrentPastaText(state),
-    currentPastaEncrypted: selectCurrentPastaEncrypted(state),
-    currentPastaOwnerId: selectCurrentPastaOwnerId(state),
-    currentPastaCreated: selectCurrentPastaCreated(state),
-    userIsLoggedIn: selectUserIsLoggedIn(state),
-    isLoadingPasta: selectIsLoadingPasta(state),
-    currentPastaOwner: selectCurrentPastaOwner(state),
-    pastaFetchError: selectPastaFetchError(state)
-});
-
-const actionsMap = {loadPastaById, removeCurrentPasta};
-
-export default connect(mapStateToProps, actionsMap)(Pasta);

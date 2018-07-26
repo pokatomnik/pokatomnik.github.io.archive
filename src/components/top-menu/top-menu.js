@@ -6,7 +6,6 @@ import NavDropdown from 'react-bootstrap/lib/NavDropdown';
 import MenuItem from 'react-bootstrap/lib/MenuItem';
 import Link from '../common/link/link';
 
-import UserMenu from './user-menu';
 import bem from '../../utils/bem';
 
 import './top-menu.css';
@@ -43,7 +42,6 @@ export default function TopMenu() {
                         </Link>
                     </NavDropdown>
                 </Nav>
-                <UserMenu />
             </Navbar.Collapse>
         </Navbar>
     );
