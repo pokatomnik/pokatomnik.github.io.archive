@@ -7,7 +7,6 @@ import MenuItem from 'react-bootstrap/lib/MenuItem';
 import Link from '../common/link/link';
 
 import bem from '../../utils/bem';
-
 import './top-menu.css';
 
 
