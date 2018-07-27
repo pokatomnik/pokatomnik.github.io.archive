@@ -23,7 +23,7 @@ export default function RouteAbout() {
                     <Link component={Button} bsStyle="success" to="/">
                         Try now
                     </Link>
-                    <Link component={Button} bsStyle="success" to="/about">
+                    <Link component={Button} bsStyle="success" to="/docs">
                         Learn more
                     </Link>
                 </ButtonGroup>
@@ -34,7 +34,8 @@ export default function RouteAbout() {
                         Secure
                     </h4>
                     <p>
-                        Every pasta is protected with end-to-end Blowfish algorithm
+                        Every pasta is protected with end-to-end Blowfish algorithm.
+                        No backend. No tracking. Your data is only yours.
                     </p>
                 </Col>
                 <Col md={4}>
@@ -50,7 +51,7 @@ export default function RouteAbout() {
                         Fast
                     </h4>
                     <p>
-                        I do not request any complicated things. Just paste the text and go ahead.
+                        You'll get the link to your pasta immediately.
                     </p>
                 </Col>
             </Row>
