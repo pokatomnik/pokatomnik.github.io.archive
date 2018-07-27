@@ -17,7 +17,7 @@ export default function TopMenu() {
         <Navbar collapseOnSelect inverse className={bem(BLOCK_CLASS).toString()}>
             <Navbar.Header>
                 <Navbar.Brand>
-                    <Link component="a" to="/">
+                    <Link to="/">
                         Pasta 2.0
                     </Link>
                 </Navbar.Brand>
@@ -25,9 +25,12 @@ export default function TopMenu() {
             </Navbar.Header>
             <Navbar.Collapse>
                 <Nav>
-                    <NavItem>
+                    <Link
+                        component={NavItem}
+                        to="/"
+                    >
                         Create
-                    </NavItem>
+                    </Link>
                     <NavDropdown title="Documentation" id="docsDropdown">
                         <Link to="/docs" component={MenuItem}>
                             Read docs
