@@ -9,7 +9,9 @@ import bem from '../../utils/bem';
 import RouteAbout from '../route-about/route-about';
 import RouteRoot from '../route-root/route-root';
 import RoutePasta from '../route-pasta/route-pasta';
+import RouteFeedback from '../route-feedback/route-feedback';
 import ErrorModal from '../error-modal/error-modal';
+import ThankYou from '../thank-you/thank-you';
 import './toastr-fixes.css';
 
 
@@ -30,6 +32,8 @@ export default function Main() {
                             <Redirect exact from="/pasta" to="/"/>
                         </Switch>
                         <Route exact path="/pasta/:data" component={RoutePasta} />
+                        <Route exact path="/feedback" component={RouteFeedback} />
+                        <Route exact path="/thank-you" component={ThankYou} />
                     </Col>
                     <Col md={1} />
                 </Row>

@@ -43,6 +43,12 @@ export default function TopMenu() {
                             About
                         </Link>
                     </NavDropdown>
+                    <Link
+                        component={NavItem}
+                        to="/feedback"
+                    >
+                        Feedback
+                    </Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>
