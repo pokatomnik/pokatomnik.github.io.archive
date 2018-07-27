@@ -14,7 +14,7 @@ const BLOCK_CLASS = 'top-menu';
 
 export default function TopMenu() {
     return (
-        <Navbar collapseOnSelect className={bem(BLOCK_CLASS).toString()}>
+        <Navbar collapseOnSelect inverse className={bem(BLOCK_CLASS).toString()}>
             <Navbar.Header>
                 <Navbar.Brand>
                     <Link component="a" to="/">

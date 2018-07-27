@@ -10,6 +10,7 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
+import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import { actions as toastrActions } from 'react-redux-toastr';
 
 import bem from '../../utils/bem';
@@ -204,12 +205,14 @@ class CreatePasta extends PureComponent {
                             </InputGroup>
                         </FormGroup>
                         <FormGroup>
-                            <Button
-                                bsStyle="success"
-                                type="submit"
-                            >
-                                Create
-                            </Button>
+                            <ButtonGroup vertical block>
+                                <Button
+                                    bsStyle="success"
+                                    type="submit"
+                                >
+                                    Create
+                                </Button>
+                            </ButtonGroup>
                         </FormGroup>
                     </Col>
                 </form>

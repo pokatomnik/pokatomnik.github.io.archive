@@ -5,6 +5,8 @@ import InputGroup from 'react-bootstrap/lib/InputGroup';
 import Button from 'react-bootstrap/lib/Button';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
+import Row from 'react-bootstrap/lib/Row';
+import Col from 'react-bootstrap/lib/Col';
 
 import { decrypt } from '../../utils/encryption';
 import FuckAutocomplete from '../common/fuck-autocomplete/fuck-autocomplete';
@@ -47,26 +49,32 @@ export default class DecryptInput extends PureComponent {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit}>
-                <FuckAutocomplete type="password" />
-                <FormGroup>
-                    <ControlLabel>
-                        This pasta is encrypted.
-                    </ControlLabel>
-                    <InputGroup>
-                        <FormControl
-                            type="password"
-                            placeholder="Type this pasta encryption key here"
-                            onChange={this.handleKeyInput}
-                        />
-                        <InputGroup.Button>
-                            <Button type="submit">
-                                Decrypt
-                            </Button>
-                        </InputGroup.Button>
-                    </InputGroup>
-                </FormGroup>
-            </form>
+            <Row>
+                <Col md={4} />
+                <Col md={4}>
+                    <form onSubmit={this.handleSubmit}>
+                        <FuckAutocomplete type="password" />
+                        <FormGroup>
+                            <ControlLabel>
+                                This pasta is encrypted.
+                            </ControlLabel>
+                            <InputGroup>
+                                <FormControl
+                                    type="password"
+                                    placeholder="Pasta key"
+                                    onChange={this.handleKeyInput}
+                                />
+                                <InputGroup.Button>
+                                    <Button type="submit">
+                                        Decrypt
+                                    </Button>
+                                </InputGroup.Button>
+                            </InputGroup>
+                        </FormGroup>
+                    </form>
+                </Col>
+                <Col md={4} />
+            </Row>
         );
     }
 }

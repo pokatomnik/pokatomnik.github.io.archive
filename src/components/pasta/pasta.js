@@ -9,6 +9,7 @@ import bem from '../../utils/bem';
 import { BLOCK_NAME } from './constants';
 import Highlight from '../common/highlight/highlight';
 import DecryptInput from './decrypt-input';
+import './pasta.css';
 
 
 export default class Pasta extends Component {
@@ -86,7 +87,7 @@ export default class Pasta extends Component {
                 <Col md={12}>
                     <Panel>
                         <Panel.Heading className={bem(BLOCK_NAME, 'name-header').toString()}>
-                            {name}
+                            {name || 'Unnamed'}
                             {(encrypted && this.state.decrypted) && (
                                 <span className="pull-right">
                                     Looks bad?&nbsp;
