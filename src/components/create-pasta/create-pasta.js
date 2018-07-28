@@ -125,7 +125,7 @@ class CreatePasta extends PureComponent {
                         </span>
                     ),
                     options: {
-                        showCloseButton: true, // true by default
+                        showCloseButton: true,
                     }
                 });
             })
