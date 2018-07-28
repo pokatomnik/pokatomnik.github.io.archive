@@ -121,8 +121,7 @@ class CreatePasta extends PureComponent {
                             Click&nbsp;
                             <Link to={url} href={url}>
                                 here
-                            </Link>&nbsp;
-                            to see It.
+                            </Link>&nbsp;to see It.
                         </span>
                     ),
                     options: {

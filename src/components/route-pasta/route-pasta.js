@@ -1,18 +1,23 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import {push} from 'react-router-redux';
 
 import {urlToData} from '../../utils/create-url';
 import Pasta from '../pasta/pasta';
+import {setError} from '../../models/error';
 
 const BLOCK_NAME = 'route-pasta';
 
-export default class RoutePasta extends PureComponent {
+class RoutePasta extends PureComponent {
     static propTypes = {
         match: PropTypes.shape({
             params: PropTypes.shape({
                 data: PropTypes.string.isRequired
             }).isRequired
-        }).isRequired
+        }).isRequired,
+        setError: PropTypes.func.isRequired,
+        push: PropTypes.func.isRequired
     };
 
     static handleNewProps(context, props) {
@@ -23,6 +28,13 @@ export default class RoutePasta extends PureComponent {
                     text,
                     encrypted
                 });
+            })
+            .catch(() => {
+                context.props.push('/');
+                context.props.setError(
+                    'Broken link',
+                    'This link is broken, so Pasta cannot read It.'
+                );
             });
     }
 
@@ -75,3 +87,10 @@ export default class RoutePasta extends PureComponent {
         );
     }
 }
+
+const actionsMap = {
+    push,
+    setError
+};
+
+export default connect(null, actionsMap)(RoutePasta);

@@ -20,5 +20,5 @@
 }
 .main .redux-toastr .toastr .rrt-right-container .close-toastr {
     height: auto;
-    text-align: right;
+    text-align: left;
 }
