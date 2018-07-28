@@ -7,6 +7,7 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import ControlLabel from 'react-bootstrap/lib/ControlLabel';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
+import HelpBlock from 'react-bootstrap/lib/HelpBlock';
 
 import { decrypt } from '../../utils/encryption';
 import FuckAutocomplete from '../common/fuck-autocomplete/fuck-autocomplete';
@@ -26,15 +27,25 @@ export default class DecryptInput extends PureComponent {
         super(props);
 
         this.state = {
-            key: ''
+            key: '',
+            helpText: ''
         };
 
         this.handleKeyInput = this.handleKeyInput.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    componentDidUpdate({encryptedText: oldEncryptedText}) {
+        if (oldEncryptedText !== this.props.encryptedText) {
+            this.setState({helpText: ''});
+        }
+    }
+
     handleKeyInput({target: {value: key}}) {
-        this.setState({key});
+        this.setState({
+            key,
+            helpText: this.state.helpText ? '' : this.state.helpText
+        });
     }
 
     handleSubmit(evt) {
@@ -44,6 +55,11 @@ export default class DecryptInput extends PureComponent {
             onDecrypt,
             encryptedText
         } = this.props;
+        if (!this.state.key) {
+            return this.setState({
+                helpText: 'Encryption key must not be empty'
+            });
+        }
         onDecrypt(decrypt(encryptedText, this.state.key));
     }
 
@@ -65,11 +81,19 @@ export default class DecryptInput extends PureComponent {
                                     onChange={this.handleKeyInput}
                                 />
                                 <InputGroup.Button>
-                                    <Button type="submit">
+                                    <Button
+                                        type="submit"
+                                        bsStyle="danger"
+                                    >
                                         Decrypt
                                     </Button>
                                 </InputGroup.Button>
                             </InputGroup>
+                            {this.state.helpText && (
+                                <HelpBlock>
+                                    {this.state.helpText}
+                                </HelpBlock>
+                            )}
                         </FormGroup>
                     </form>
                 </Col>

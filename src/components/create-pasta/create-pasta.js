@@ -23,9 +23,18 @@ import Link from '../common/link/link';
 
 const BLOCK_NAME = 'create-pasta';
 const trigger = ['hover'];
-const overlayTooltip = (
-    <Tooltip id="Encrypt pasta">
-        Encrypt pasta
+const UNBREAKABLE_SPACE = '\xa0';
+
+const replaceWithUnbreakable = (str) => str.replace(/ /g, UNBREAKABLE_SPACE);
+const overlayTooltipEncrypted = (
+    <Tooltip id="encrypted">
+        {replaceWithUnbreakable('This pasta should be encrypted')}
+    </Tooltip>
+);
+
+const overlayTooltipNotEncrypted = (
+    <Tooltip id="notEncrypted">
+        {replaceWithUnbreakable('This pasta should not be encrypted')}
     </Tooltip>
 );
 
@@ -53,16 +62,28 @@ class CreatePasta extends PureComponent {
         this.handleKeyChange = this.handleKeyChange.bind(this);
         this.handleTextChange = this.handleTextChange.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
-        this.handleToggleEncryption = this.handleToggleEncryption.bind(this);
         this.handleSubmitForm = this.handleSubmitForm.bind(this);
+        this.setEncrypted = this.setEncrypted.bind(this);
+    }
+
+    setEncrypted(encrypted) {
+        this.setState({encrypted});
+        if (!encrypted) {
+            this.setState({key: ''});
+        }
     }
 
     handleEncryptChange({target: {checked: encrypted}}) {
-        this.setState({encrypted});
+        this.setEncrypted(encrypted);
     }
 
     handleKeyChange({target: {value: key}}) {
         this.setState({key});
+        if (key && !this.state.encrypted) {
+            this.setEncrypted(true);
+        } else if (!key && this.state.encrypted) {
+            this.setEncrypted(false);
+        }
     }
 
     handleTextChange({target: {value: text}}) {
@@ -71,12 +92,6 @@ class CreatePasta extends PureComponent {
 
     handleNameChange({target: {value: name}}) {
         this.setState({name});
-    }
-
-    handleToggleEncryption() {
-        this.setState({
-            encrypted: !this.state.encrypted
-        });
     }
 
     static handleSelectAll({target}) {
@@ -176,31 +191,32 @@ class CreatePasta extends PureComponent {
                                 Set encryption key
                             </ControlLabel>
                             <InputGroup>
-                                <OverlayTrigger
-                                    placement="top"
-                                    trigger={trigger}
-                                    overlay={overlayTooltip}
+                                <InputGroup.Addon
+                                    className={bem(BLOCK_NAME, 'encrypt-toggler-wrapper').toString()}
                                 >
-                                    <InputGroup.Addon
-                                        onClick={this.handleToggleEncryption}
-                                        className={bem(BLOCK_NAME, 'encrypt-toggler-wrapper').toString()}
+                                    <OverlayTrigger
+                                        placement="top"
+                                        trigger={trigger}
+                                        overlay={this.state.encrypted
+                                            ? overlayTooltipEncrypted
+                                            : overlayTooltipNotEncrypted
+                                        }
                                     >
                                         <input
                                             type="checkbox"
                                             aria-label="Encrypt message"
                                             className={bem(BLOCK_NAME, 'encrypt-toggler')}
                                             checked={this.state.encrypted}
-                                            onChange={this.handleEncryptChange}
+                                            readOnly
                                         />
-                                    </InputGroup.Addon>
-                                </OverlayTrigger>
+                                    </OverlayTrigger>
+                                </InputGroup.Addon>
                                 <FormControl
                                     type="password"
                                     placeholder="Encryption key"
-                                    disabled={!this.state.encrypted}
                                     value={this.state.key}
                                     onChange={this.handleKeyChange}
-                                    onFocus={this.handleSelectAll}
+                                    onFocus={CreatePasta.handleSelectAll}
                                 />
                             </InputGroup>
                         </FormGroup>

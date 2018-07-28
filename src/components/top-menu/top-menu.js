@@ -18,7 +18,7 @@ export default function TopMenu() {
             <Navbar.Header>
                 <Navbar.Brand>
                     <Link to="/">
-                        Pasta 2.0
+                        Pasta 2.0 🍝
                     </Link>
                 </Navbar.Brand>
                 <Navbar.Toggle />
