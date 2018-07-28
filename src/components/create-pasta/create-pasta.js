@@ -164,7 +164,7 @@ class CreatePasta extends PureComponent {
                                 className={bem(BLOCK_NAME, 'pasta-text').toString()}
                                 componentClass="textarea"
                                 placeholder="Your text"
-                                rows={15}
+                                rows={10}
                                 value={this.state.text}
                                 onChange={this.handleTextChange}
                             />
