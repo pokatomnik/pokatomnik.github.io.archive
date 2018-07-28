@@ -115,10 +115,10 @@ class CreatePasta extends PureComponent {
                 const url = `/pasta/${compressed}`;
                 this.props.addToastr({
                     type: 'light',
-                    title: 'A new Pasta has been created',
+                    title: name || 'Unnamed',
                     message: (
                         <span>
-                            Click&nbsp;
+                            A new Pasta has been created. Click&nbsp;
                             <Link to={url} href={url}>
                                 here
                             </Link>&nbsp;to see It.
