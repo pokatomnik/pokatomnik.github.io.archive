@@ -1,19 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import find from 'lodash.find';
 import Panel from 'react-bootstrap/lib/Panel';
-
-import Question from './question';
-import Answer from './answer';
 
 
 export default class QAItem extends PureComponent {
-    static Answer = Answer;
-    static Question = Question;
-
     static propTypes = {
         selected: PropTypes.bool.isRequired,
-        children: PropTypes.arrayOf(PropTypes.element.isRequired).isRequired,
+        question: PropTypes.string.isRequired,
+        answer: PropTypes.string.isRequired,
         index: PropTypes.number.isRequired,
         onToggle: PropTypes.func.isRequired
     };
@@ -43,23 +37,23 @@ export default class QAItem extends PureComponent {
     }
 
     render() {
-        const children = React.Children.toArray(this.props.children);
-        const answer = find(children, (child) => child.type === QAItem.Answer);
-        const question = find(children, (child) => child.type === QAItem.Question);
-
-        if (!answer && !question) {
-            return null;
-        }
-
         return (
             <div ref={this.saveRef}>
                 <Panel
                     expanded={this.props.selected}
                     onToggle={this.onToggle}
                 >
-                    {question && question}
+                    <Panel.Heading>
+                        <Panel.Heading>
+                            <Panel.Title toggle>
+                                <strong>Q:</strong> {this.props.question}
+                            </Panel.Title>
+                        </Panel.Heading>
+                    </Panel.Heading>
                     <Panel.Collapse>
-                        {answer && answer}
+                        <Panel.Body>
+                            <strong>A:</strong> {this.props.answer}
+                        </Panel.Body>
                     </Panel.Collapse>
                 </Panel>
             </div>

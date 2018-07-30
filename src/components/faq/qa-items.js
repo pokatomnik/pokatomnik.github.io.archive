@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { BLOCK_NAME } from './constants';
 import bem from '../../utils/bem';
 import faqData from './faq-data';
-import QAItem from './qa-item/qa-item';
+import QAItem from './qa-item';
 
 
 export default class QAItems extends PureComponent {
@@ -33,14 +33,9 @@ export default class QAItems extends PureComponent {
                         selected={index === selectedIndex}
                         index={index}
                         onToggle={this.handleToggle}
-                    >
-                        <QAItem.Question>
-                            {question}
-                        </QAItem.Question>
-                        <QAItem.Answer>
-                            {answer}
-                        </QAItem.Answer>
-                    </QAItem>
+                        question={question}
+                        answer={answer}
+                    />
                 ))}
             </div>
         );
