@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import Modal from 'react-bootstrap/lib/Modal';
 import Button from 'react-bootstrap/lib/Button';
+import Link from '../common/link/link';
 
 import {
     selectErrorExists,
@@ -10,7 +11,6 @@ import {
     selectErrorTitle,
     removeError
 } from '../../models/error';
-import { developerEmail } from '../../constants';
 
 
 class ErrorModal extends PureComponent {
@@ -19,16 +19,6 @@ class ErrorModal extends PureComponent {
         errorTitle: PropTypes.string,
         errorMessage: PropTypes.string
     };
-
-    constructor(props) {
-        super(props);
-
-        this.handleSendError = this.handleSendError.bind(this);
-    }
-
-    handleSendError() {
-        window.open(`mailto:${developerEmail}?subject=Error`, '_blank');
-    }
 
     render() {
         const {
@@ -49,12 +39,14 @@ class ErrorModal extends PureComponent {
                     <p>{errorMessage}</p>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button
+                    <Link
                         bsStyle="warning"
-                        onClick={this.handleSendError}
+                        to="/feedback"
+                        beforeGo={removeError}
+                        component={Button}
                     >
                         Send error
-                    </Button>
+                    </Link>
                     <Button
                         bsStyle="danger"
                         onClick={removeError}
