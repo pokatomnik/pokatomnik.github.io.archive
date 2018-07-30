@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux';
 import Modal from 'react-bootstrap/lib/Modal';
@@ -12,51 +12,46 @@ import {
     removeError
 } from '../../models/error';
 
+ErrorModal.propTypes = {
+    errorExists: PropTypes.bool.isRequired,
+    errorTitle: PropTypes.string,
+    errorMessage: PropTypes.string
+};
 
-class ErrorModal extends PureComponent {
-    static propTypes = {
-        errorExists: PropTypes.bool.isRequired,
-        errorTitle: PropTypes.string,
-        errorMessage: PropTypes.string
-    };
-
-    render() {
-        const {
-            errorExists,
-            errorTitle,
-            errorMessage,
-            removeError
-        } = this.props;
-
-        return (
-            <Modal show={errorExists} onHide={removeError}>
-                <Modal.Header>
-                    <Modal.Title>
-                        {errorTitle}
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <p>{errorMessage}</p>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Link
-                        bsStyle="warning"
-                        to="/feedback"
-                        beforeGo={removeError}
-                        component={Button}
-                    >
-                        Send error
-                    </Link>
-                    <Button
-                        bsStyle="danger"
-                        onClick={removeError}
-                    >
-                        OK
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-        );
-    }
+function ErrorModal({
+    errorExists,
+    errorTitle,
+    errorMessage,
+    removeError
+}) {
+    return (
+        <Modal show={errorExists} onHide={removeError}>
+            <Modal.Header>
+                <Modal.Title>
+                    {errorTitle}
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <p>{errorMessage}</p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Link
+                    bsStyle="warning"
+                    to="/feedback"
+                    beforeGo={removeError}
+                    component={Button}
+                >
+                    Send error
+                </Link>
+                <Button
+                    bsStyle="danger"
+                    onClick={removeError}
+                >
+                    OK
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    );
 }
 
 const actionsMap = {removeError};
