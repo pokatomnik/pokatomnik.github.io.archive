@@ -6,8 +6,8 @@ import Panel from 'react-bootstrap/lib/Panel';
 export default class QAItem extends PureComponent {
     static propTypes = {
         selected: PropTypes.bool.isRequired,
-        question: PropTypes.string.isRequired,
-        answer: PropTypes.string.isRequired,
+        question: PropTypes.node.isRequired,
+        answer: PropTypes.node.isRequired,
         index: PropTypes.number.isRequired,
         onToggle: PropTypes.func.isRequired
     };
@@ -44,11 +44,9 @@ export default class QAItem extends PureComponent {
                     onToggle={this.onToggle}
                 >
                     <Panel.Heading>
-                        <Panel.Heading>
-                            <Panel.Title toggle>
-                                <strong>Q:</strong> {this.props.question}
-                            </Panel.Title>
-                        </Panel.Heading>
+                        <Panel.Title toggle>
+                            <strong>Q:</strong> {this.props.question}
+                        </Panel.Title>
                     </Panel.Heading>
                     <Panel.Collapse>
                         <Panel.Body>
