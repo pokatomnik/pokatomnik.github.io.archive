@@ -13,6 +13,7 @@ import RouteFeedback from '../route-feedback/route-feedback';
 import ErrorModal from '../error-modal/error-modal';
 import ThankYou from '../thank-you/thank-you';
 import RouteFAQ from '../route-faq/route-faq';
+import RouteConceit from '../route-conceit/router-conceit';
 import './toastr-fixes.css';
 
 
@@ -36,6 +37,7 @@ export default function Main() {
                         <Route exact path="/feedback" component={RouteFeedback} />
                         <Route exact path="/thank-you" component={ThankYou} />
                         <Route exact path="/faq" component={RouteFAQ} />
+                        <Route exact path="/conceit" component={RouteConceit} />
                     </Col>
                     <Col md={1} />
                 </Row>
