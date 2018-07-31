@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Redirect, Switch } from 'react-router';
+import { Route } from 'react-router';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import ReduxToastr from 'react-redux-toastr'
@@ -14,6 +14,7 @@ import ErrorModal from '../error-modal/error-modal';
 import ThankYou from '../thank-you/thank-you';
 import RouteFAQ from '../route-faq/route-faq';
 import RouteConceit from '../route-conceit/router-conceit';
+import Route404 from '../route-404/route-404';
 import './toastr-fixes.css';
 
 
@@ -28,16 +29,13 @@ export default function Main() {
                     <Col md={1} />
                     <Col md={10}>
                         <Route exact path="/" component={RouteRoot} />
-                        <Route exact path="/profile" component={null} />
                         <Route exact path="/about" component={RouteAbout} />
-                        <Switch>
-                            <Redirect exact from="/pasta" to="/"/>
-                        </Switch>
                         <Route exact path="/pasta/:data" component={RoutePasta} />
                         <Route exact path="/feedback" component={RouteFeedback} />
                         <Route exact path="/thank-you" component={ThankYou} />
                         <Route exact path="/faq" component={RouteFAQ} />
                         <Route exact path="/conceit" component={RouteConceit} />
+                        <Route exact path="**" component={Route404} />
                     </Col>
                     <Col md={1} />
                 </Row>
