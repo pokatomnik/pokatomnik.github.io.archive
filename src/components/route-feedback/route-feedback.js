@@ -19,6 +19,14 @@ export default function RouteFeedback() {
             <Row>
                 <Col md={2} />
                 <Col md={4}>
+                    <h1>
+                        Feedback
+                    </h1>
+                    <p>
+                        I will be glad to hear your opinion. Please, feel free to share your experience.
+                    </p>
+                </Col>
+                <Col md={4}>
                     <form
                         action={`https://formspree.io/${developerEmail}`}
                         method="POST"
@@ -56,14 +64,6 @@ export default function RouteFeedback() {
                             </ButtonGroup>
                         </FormGroup>
                     </form>
-                </Col>
-                <Col md={4}>
-                    <h1>
-                        Feedback
-                    </h1>
-                    <p>
-                        I will be glad to hear your opinion. Please, feel free to share your experience.
-                    </p>
                 </Col>
                 <Col md={2} />
             </Row>
