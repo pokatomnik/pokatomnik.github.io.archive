@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route } from 'react-router';
+import { Route, Switch } from 'react-router';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import ReduxToastr from 'react-redux-toastr'
@@ -28,14 +28,16 @@ export default function Main() {
                 <Row>
                     <Col md={1} />
                     <Col md={10}>
-                        <Route exact path="/" component={RouteRoot} />
-                        <Route exact path="/about" component={RouteAbout} />
-                        <Route exact path="/pasta/:data" component={RoutePasta} />
-                        <Route exact path="/feedback" component={RouteFeedback} />
-                        <Route exact path="/thank-you" component={ThankYou} />
-                        <Route exact path="/faq" component={RouteFAQ} />
-                        <Route exact path="/conceit" component={RouteConceit} />
-                        <Route exact path="**" component={Route404} />
+                        <Switch>
+                            <Route exact path="/" component={RouteRoot} />
+                            <Route exact path="/about" component={RouteAbout} />
+                            <Route exact path="/pasta/:data" component={RoutePasta} />
+                            <Route exact path="/feedback" component={RouteFeedback} />
+                            <Route exact path="/thank-you" component={ThankYou} />
+                            <Route exact path="/faq" component={RouteFAQ} />
+                            <Route exact path="/conceit" component={RouteConceit} />
+                            <Route exact component={Route404} />
+                        </Switch>
                     </Col>
                     <Col md={1} />
                 </Row>
