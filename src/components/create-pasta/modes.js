@@ -1,0 +1,16 @@
+import 'codemirror/mode/clike/clike';
+import 'codemirror/mode/css/css';
+import 'codemirror/mode/go/go';
+import 'codemirror/mode/haml/haml';
+import 'codemirror/mode/htmlmixed/htmlmixed';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/jsx/jsx';
+import 'codemirror/mode/pascal/pascal';
+import 'codemirror/mode/php/php';
+import 'codemirror/mode/python/python';
+import 'codemirror/mode/ruby/ruby';
+import 'codemirror/mode/rust/rust';
+import 'codemirror/mode/sass/sass';
+import 'codemirror/mode/shell/shell';
+import 'codemirror/mode/sql/sql';
+import 'codemirror/mode/swift/swift';

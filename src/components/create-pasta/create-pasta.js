@@ -12,18 +12,39 @@ import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import { actions as toastrActions } from 'react-redux-toastr';
+import { Controlled as CodeMirror } from "react-codemirror2";
 
 import bem from '../../utils/bem';
 import { setError } from '../../models/error';
 import FuckAutocomplete from '../common/fuck-autocomplete/fuck-autocomplete';
 import {dataToUrl} from '../../utils/create-url';
 import { developerEmail } from '../../constants';
-import './create-pasta.css';
 import Link from '../common/link/link';
+import './modes';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/material.css';
 
 const BLOCK_NAME = 'create-pasta';
 const trigger = ['hover'];
 const UNBREAKABLE_SPACE = '\xa0';
+const modeIds = [
+    'clike',
+    'css',
+    'go',
+    'haml',
+    'htmlmixed',
+    'javascript',
+    'jsx',
+    'pascal',
+    'php',
+    'python',
+    'ruby',
+    'rust',
+    'sass',
+    'shell',
+    'sql',
+    'swift'
+];
 
 const replaceWithUnbreakable = (str) => str.replace(/ /g, UNBREAKABLE_SPACE);
 const overlayTooltipEncrypted = (
@@ -49,7 +70,8 @@ class CreatePasta extends PureComponent {
             name: '',
             text: '',
             encrypted: false,
-            key: ''
+            key: '',
+            currentMode: modeIds[0]
         };
     }
 
@@ -64,6 +86,7 @@ class CreatePasta extends PureComponent {
         this.handleNameChange = this.handleNameChange.bind(this);
         this.handleSubmitForm = this.handleSubmitForm.bind(this);
         this.setEncrypted = this.setEncrypted.bind(this);
+        this.handleModeChange = this.handleModeChange.bind(this);
     }
 
     setEncrypted(encrypted) {
@@ -86,7 +109,11 @@ class CreatePasta extends PureComponent {
         }
     }
 
-    handleTextChange({target: {value: text}}) {
+    handleModeChange({target: {value: currentMode}}) {
+        this.setState({currentMode});
+    }
+
+    handleTextChange(editor, data, text) {
         this.setState({text});
     }
 
@@ -174,14 +201,38 @@ class CreatePasta extends PureComponent {
                             <ControlLabel>
                                 Pasta text
                             </ControlLabel>
-                            <FormControl
-                                className={bem(BLOCK_NAME, 'pasta-text').toString()}
-                                componentClass="textarea"
-                                placeholder="Your text"
-                                rows={10}
+                            <CodeMirror
+                                className={bem(BLOCK_NAME, 'code-editor').toString()}
+                                viewportMargin={20}
+                                onBeforeChange={this.handleTextChange}
                                 value={this.state.text}
-                                onChange={this.handleTextChange}
+                                options={{
+                                    mode: this.state.currentMode,
+                                    theme: 'material',
+                                    lineNumbers: true,
+                                    autofocus: true,
+                                    smartIndent: false
+                                }}
                             />
+                        </FormGroup>
+
+                        <FormGroup>
+                            <ControlLabel>
+                                Highlight
+                            </ControlLabel>
+                            <FormControl
+                                onChange={this.handleModeChange}
+                                componentClass="select"
+                            >
+                                {modeIds.map((modeId) => (
+                                    <option
+                                        value={modeId}
+                                        key={modeId}
+                                    >
+                                        {modeId}
+                                    </option>
+                                ))}
+                            </FormControl>
                         </FormGroup>
                     </Col>
                     <Col md={4}>
