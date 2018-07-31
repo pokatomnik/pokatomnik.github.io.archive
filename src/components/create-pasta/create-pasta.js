@@ -20,6 +20,7 @@ import FuckAutocomplete from '../common/fuck-autocomplete/fuck-autocomplete';
 import {dataToUrl} from '../../utils/create-url';
 import { developerEmail } from '../../constants';
 import Link from '../common/link/link';
+import Asterisk from '../common/asterisk/asterisk';
 import './modes';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material.css';
@@ -199,7 +200,7 @@ class CreatePasta extends PureComponent {
 
                         <FormGroup>
                             <ControlLabel>
-                                Pasta text
+                                Pasta text <Asterisk tooltipText="Text should not be empty"/>
                             </ControlLabel>
                             <CodeMirror
                                 className={bem(BLOCK_NAME, 'code-editor').toString()}
@@ -218,7 +219,12 @@ class CreatePasta extends PureComponent {
 
                         <FormGroup>
                             <ControlLabel>
-                                Highlight
+                                Highlight ({(
+                                    <Asterisk
+                                        tooltipText="Highlight does not impact result pasta"
+                                        symbol="?"
+                                    />
+                                )})
                             </ControlLabel>
                             <FormControl
                                 onChange={this.handleModeChange}
