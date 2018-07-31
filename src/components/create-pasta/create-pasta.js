@@ -228,6 +228,7 @@ class CreatePasta extends PureComponent {
                             </ControlLabel>
                             <FormControl
                                 onChange={this.handleModeChange}
+                                value={this.state.currentMode}
                                 componentClass="select"
                             >
                                 {modeIds.map((modeId) => (
