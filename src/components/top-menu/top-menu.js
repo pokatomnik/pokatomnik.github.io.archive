@@ -40,14 +40,26 @@ export default function TopMenu() {
                         </Link>
                         <MenuItem divider />
                         <Link to="/about" component={MenuItem}>
-                            About
+                            About Pasta
                         </Link>
                     </NavDropdown>
+                    <NavItem
+                        href="https://github.com/pokatomnik/pokatomnik.github.io"
+                        target="_blank"
+                    >
+                        Source code
+                    </NavItem>
                     <Link
                         component={NavItem}
                         to="/feedback"
                     >
                         Feedback
+                    </Link>
+                    <Link
+                        component={NavItem}
+                        to="/conceit"
+                    >
+                        Conceit
                     </Link>
                 </Nav>
             </Navbar.Collapse>
