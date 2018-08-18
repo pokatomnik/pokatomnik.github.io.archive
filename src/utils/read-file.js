@@ -15,7 +15,7 @@ const readFile = (file) => new Promise((resolve, reject) => {
     }
     fileReader.onerror = reject;
 
-    fileReader.readAsDataURL(file);
+    fileReader.readAsArrayBuffer(file);
 });
 
 export default readFile;

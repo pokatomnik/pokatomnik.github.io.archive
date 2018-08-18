@@ -3,10 +3,14 @@ import FileInput from '../common/file-input/file-input';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 
-import EncryptFile from './encrypt-file';
+import EncryptionView from './encryption-view';
+import {encrypt, decrypt} from '../../utils/encryption';
 
 
 const BLOCK_NAME = 'file';
+const INVALID_FILE_ERROR = 'Add a file to encrypt.';
+const INVALID_ENCRYPTION_KEY_ERROR = 'Encryption key is required. You must specify It.';
+const INVALID_DECRYPTION_KEY_ERROR = 'Decryption key is required. You must specify It';
 
 export default class File extends PureComponent {
     constructor(props) {
@@ -33,7 +37,20 @@ export default class File extends PureComponent {
                 </Row>
                 <Row>
                     <Col md={12}>
-                        <EncryptFile title="Encrypt file" file={this.state.file} />
+                        <EncryptionView
+                            title="Encrypt file"
+                            file={this.state.file}
+                            invalidFileError={INVALID_FILE_ERROR}
+                            invalidKeyError={INVALID_ENCRYPTION_KEY_ERROR}
+                            method={encrypt}
+                        />
+                        <EncryptionView
+                            title="Decrypt file"
+                            file={this.state.file}
+                            invalidFileError={INVALID_FILE_ERROR}
+                            invalidKeyError={INVALID_DECRYPTION_KEY_ERROR}
+                            method={decrypt}
+                        />
                     </Col>
                 </Row>
             </div>

@@ -12,22 +12,21 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 
 import Asterisk from '../common/asterisk/asterisk';
 import DownloadBlob from '../common/download-blob/download-blob';
-import {encrypt} from '../../utils/encryption';
+import {encrypt, decrypt} from '../../utils/encryption';
 
-const INVALID_KEY_ERROR = 'Encryption key is required. You must specify It.';
-const INVALID_FILE_ERROR = 'Add a file to encrypt.';
-
-
-export default class EncryptFile extends PureComponent {
+export default class EncryptionView extends PureComponent {
     static propTypes = {
         file: PropTypes.shape({
             name: PropTypes.string.isRequired,
             lastModified: PropTypes.number.isRequired,
             size: PropTypes.number.isRequired,
             type: PropTypes.string.isRequired,
-            result: PropTypes.string.isRequired
+            result: PropTypes.instanceOf(ArrayBuffer).isRequired
         }),
-        title: PropTypes.string.isRequired
+        title: PropTypes.string.isRequired,
+        invalidKeyError: PropTypes.string.isRequired,
+        invalidFileError: PropTypes.string.isRequired,
+        method: PropTypes.oneOf([encrypt, decrypt]).isRequired
     };
 
     static handleSelectAll({target}) {
@@ -55,6 +54,19 @@ export default class EncryptFile extends PureComponent {
         }
     }
 
+    renderFileName(rawName) {
+        if (this.props.method === encrypt) {
+            return `${rawName}.pasta`;
+        }
+        const nameParts = this.props.file.name.split('.');
+        nameParts.pop();
+        return nameParts.join('.');
+    }
+
+    renderButtonCaption() {
+        return this.props.method === encrypt ? 'Encrypt file' : 'Decrypt file';
+    }
+
     handleKeyChange({target: {value: key}}) {
         this.setState({
             key,
@@ -68,17 +80,16 @@ export default class EncryptFile extends PureComponent {
         evt.stopPropagation();
         if (!this.props.file) {
             this.setState({
-                error: INVALID_FILE_ERROR
+                error: this.props.invalidFileError
             });
         } else if (!this.state.key) {
             this.setState({
-                error: INVALID_KEY_ERROR
+                error: this.props.invalidKeyError
             });
         } else {
-            const encryptedData = encrypt(this.props.file.result, this.state.key);
+            const encryptedData = this.props.method(this.props.file.result, this.state.key);
             const blob = new Blob([encryptedData], {type: "text/plain"});
             const downloadUrl = URL.createObjectURL(blob);
-            console.log(downloadUrl);
             this.setState({
                 downloadUrl
             });
@@ -86,6 +97,7 @@ export default class EncryptFile extends PureComponent {
     }
 
     render() {
+
         return (
             <form onSubmit={this.handleSubmit}>
                 <Panel>
@@ -110,11 +122,11 @@ export default class EncryptFile extends PureComponent {
                                             placeholder="Encryption key"
                                             value={this.state.key}
                                             onChange={this.handleKeyChange}
-                                            onFocus={EncryptFile.handleSelectAll}
+                                            onFocus={EncryptionView.handleSelectAll}
                                         />
                                         <InputGroup.Button>
                                             <Button type="submit" bsStyle="success">
-                                                Encrypt
+                                                {this.renderButtonCaption()}
                                             </Button>
                                         </InputGroup.Button>
                                     </InputGroup>
@@ -135,7 +147,7 @@ export default class EncryptFile extends PureComponent {
                                             <DownloadBlob
                                                 target="_blank"
                                                 href={this.state.downloadUrl}
-                                                download={`${this.props.file.name}.pasta`}
+                                                download={this.renderFileName(this.props.file.name)}
                                             >
                                                 Download
                                             </DownloadBlob>
