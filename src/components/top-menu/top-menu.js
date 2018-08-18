@@ -31,6 +31,12 @@ export default function TopMenu() {
                     >
                         Create
                     </Link>
+                    <Link
+                        component={NavItem}
+                        to="/file"
+                    >
+                        Encrypt files
+                    </Link>
                     <NavDropdown title="Documentation" id="docsDropdown">
                         <Link to="/docs" component={MenuItem}>
                             Read docs
