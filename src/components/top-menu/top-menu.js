@@ -8,6 +8,7 @@ import Link from '../common/link/link';
 
 import bem from '../../utils/bem';
 import './top-menu.css';
+import { documentationHref } from '../../constants';
 
 
 const BLOCK_CLASS = 'top-menu';
@@ -38,9 +39,12 @@ export default function TopMenu() {
                         Encrypt files
                     </Link>
                     <NavDropdown title="Documentation" id="docsDropdown">
-                        <Link to="/docs" component={MenuItem}>
-                            Read docs
-                        </Link>
+                        <MenuItem
+                            href={documentationHref}
+                            target="_blank"
+                        >
+                            Documentation
+                        </MenuItem>
                         <Link to="/faq" component={MenuItem}>
                             FAQ
                         </Link>

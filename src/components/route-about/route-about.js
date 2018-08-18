@@ -5,6 +5,7 @@ import Col from 'react-bootstrap/lib/Col';
 import Link from '../common/link/link';
 import Button from 'react-bootstrap/lib/Button';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
+import { documentationHref } from '../../constants';
 
 
 const BLOCK_NAME = 'route-about';
@@ -16,17 +17,24 @@ export default function RouteAbout() {
                 <h1>
                     Pasta 2.0
                 </h1>
-                <p>
-                    Encrypted sharing service
-                </p>
                 <ButtonGroup className="pull-right">
                     <Link component={Button} bsStyle="success" to="/">
                         Try now
                     </Link>
-                    <Link component={Button} bsStyle="success" to="/docs">
+                    {/* <Link component={Button} bsStyle="success" to="/docs">
                         Learn more
-                    </Link>
+                    </Link> */}
+                    <a
+                        className="btn btn-success"
+                        href={documentationHref}
+                        target="_blank"
+                    >
+                        Lear more
+                    </a>
                 </ButtonGroup>
+                <p>
+                    Encrypted sharing service
+                </p>
             </Jumbotron>
             <Row>
                 <Col md={4}>
