@@ -70,6 +70,32 @@ class EncryptionView extends PureComponent {
         return nameParts.join('.');
     }
 
+    renderDownloadButton() {
+        if (!this.state.downloadUrl) {
+            const message = (this.props.method === encrypt)
+                ? 'Press "Encrypt file first"'
+                : 'Press "Decrypt file frist"'
+            return (
+                <React.Fragment>
+                    <ControlLabel>
+                        Your download is not ready
+                    </ControlLabel>
+                    <p>
+                        {message}
+                    </p>
+                </React.Fragment>
+            );
+        }
+        return (
+            <DownloadButton
+                downloadUrl={this.state.downloadUrl}
+                downloadName={this.renderFileName(this.props.file.name)}
+            >
+                {this.renderDownloadCaption()}
+            </DownloadButton>
+        );
+    }
+
     renderButtonCaption() {
         return this.props.method === encrypt ? 'Encrypt file' : 'Decrypt file';
     }
@@ -159,14 +185,7 @@ class EncryptionView extends PureComponent {
                                 </FormGroup>
                             </Col>
                             <Col md={6}>
-                                {this.state.downloadUrl && (
-                                    <DownloadButton
-                                        downloadUrl={this.state.downloadUrl}
-                                        downloadName={this.renderFileName(this.props.file.name)}
-                                    >
-                                        {this.renderDownloadCaption()}
-                                    </DownloadButton>
-                                )}
+                                {this.renderDownloadButton()}
                             </Col>
                         </Row>
                     </Panel.Body>

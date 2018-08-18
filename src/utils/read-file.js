@@ -2,9 +2,12 @@ import pick from 'lodash.pick';
 
 const requiredPaths = ['name', 'lastModified', 'size', 'type'];
 
-const readFile = (file) => new Promise((resolve, reject) => {
+const readFile = (file, maxSize) => new Promise((resolve, reject) => {
     if (!file) {
         resolve();
+    }
+    if (file.size > maxSize) {
+        reject(new Error('Too big file'));
     }
     const fileReader = new FileReader();
     fileReader.onload = () => {

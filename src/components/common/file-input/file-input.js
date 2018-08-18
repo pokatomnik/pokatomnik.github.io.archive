@@ -10,7 +10,8 @@ import './file-input.css';
 const BLOCK_NAME = 'file-input';
 const ON_READ_ERROR_KEY = 'onReadError';
 const omitPaths = [ON_READ_ERROR_KEY];
-const NO_FILE_SELECTED = 'ADD📎FILES';
+const MAX_FILESIZE = 1024 * 1024 * 5;
+const NO_FILE_SELECTED = `ADD📎FILES (${Math.round(MAX_FILESIZE / 1024 / 1024)}mb max)`;
 
 export default class FileInput extends PureComponent {
     static propTypes = {
@@ -36,7 +37,7 @@ export default class FileInput extends PureComponent {
     }
 
     handleFileChange(evt) {
-        readFile(evt.target.files[0])
+        readFile(evt.target.files[0], MAX_FILESIZE)
             .then((file) => {
                 this.mounted && this.setState({fileName: file.name});
                 this.props.onChange(file);
