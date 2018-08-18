@@ -11,9 +11,13 @@ import Col from 'react-bootstrap/lib/Col';
 import FormControl from 'react-bootstrap/lib/FormControl';
 
 import Asterisk from '../common/asterisk/asterisk';
-import DownloadBlob from '../common/download-blob/download-blob';
 import {encrypt, decrypt} from '../../utils/encryption';
+import DownloadButton from './download-button';
 
+
+const INVALID_FILE_ERROR = 'Add a file to encrypt.';
+const INVALID_ENCRYPTION_KEY_ERROR = 'Encryption key is required. You must specify It.';
+const INVALID_DECRYPTION_KEY_ERROR = 'Decryption key is required. You must specify It';
 export default class EncryptionView extends PureComponent {
     static propTypes = {
         file: PropTypes.shape({
@@ -24,8 +28,6 @@ export default class EncryptionView extends PureComponent {
             result: PropTypes.instanceOf(ArrayBuffer).isRequired
         }),
         title: PropTypes.string.isRequired,
-        invalidKeyError: PropTypes.string.isRequired,
-        invalidFileError: PropTypes.string.isRequired,
         method: PropTypes.oneOf([encrypt, decrypt]).isRequired
     };
 
@@ -67,6 +69,12 @@ export default class EncryptionView extends PureComponent {
         return this.props.method === encrypt ? 'Encrypt file' : 'Decrypt file';
     }
 
+    renderDownloadCaption() {
+        return this.props.method === encrypt
+            ? 'Click here to download encrypted file'
+            : 'Click here to download decrypted file'
+    }
+
     handleKeyChange({target: {value: key}}) {
         this.setState({
             key,
@@ -80,11 +88,13 @@ export default class EncryptionView extends PureComponent {
         evt.stopPropagation();
         if (!this.props.file) {
             this.setState({
-                error: this.props.invalidFileError
+                error: INVALID_FILE_ERROR
             });
         } else if (!this.state.key) {
             this.setState({
-                error: this.props.invalidKeyError
+                error: (this.props.method === encrypt)
+                    ? INVALID_ENCRYPTION_KEY_ERROR
+                    : INVALID_DECRYPTION_KEY_ERROR
             });
         } else {
             const encryptedData = this.props.method(this.props.file.result, this.state.key);
@@ -139,20 +149,12 @@ export default class EncryptionView extends PureComponent {
                             </Col>
                             <Col md={6}>
                                 {this.state.downloadUrl && (
-                                    <FormGroup>
-                                        <ControlLabel>
-                                            Click here to download compressed and encrypted file
-                                        </ControlLabel>
-                                        <InputGroup>
-                                            <DownloadBlob
-                                                target="_blank"
-                                                href={this.state.downloadUrl}
-                                                download={this.renderFileName(this.props.file.name)}
-                                            >
-                                                Download
-                                            </DownloadBlob>
-                                        </InputGroup>
-                                    </FormGroup>
+                                    <DownloadButton
+                                        downloadUrl={this.state.downloadUrl}
+                                        downloadName={this.renderFileName(this.props.file.name)}
+                                    >
+                                        {this.renderDownloadCaption()}
+                                    </DownloadButton>
                                 )}
                             </Col>
                         </Row>
