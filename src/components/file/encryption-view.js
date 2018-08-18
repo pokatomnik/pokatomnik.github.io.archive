@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import InputGroup from 'react-bootstrap/lib/InputGroup';
 import Button from 'react-bootstrap/lib/Button';
 import HelpBlock from 'react-bootstrap/lib/HelpBlock';
@@ -13,12 +14,16 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import Asterisk from '../common/asterisk/asterisk';
 import {encrypt, decrypt} from '../../utils/encryption';
 import DownloadButton from './download-button';
+import {setError} from '../../models/error';
 
 
 const INVALID_FILE_ERROR = 'Add a file to encrypt.';
 const INVALID_ENCRYPTION_KEY_ERROR = 'Encryption key is required. You must specify It.';
 const INVALID_DECRYPTION_KEY_ERROR = 'Decryption key is required. You must specify It';
-export default class EncryptionView extends PureComponent {
+const GENERIC_ERROR_TITLE = 'Can\'t do encryption things';
+const GENERIC_ERROR_MESSAGE = 'Your encrypted file could be corrupted or Pasta has the error. ' +
+    'Please, let me know more information about this issue.';
+class EncryptionView extends PureComponent {
     static propTypes = {
         file: PropTypes.shape({
             name: PropTypes.string.isRequired,
@@ -97,7 +102,13 @@ export default class EncryptionView extends PureComponent {
                     : INVALID_DECRYPTION_KEY_ERROR
             });
         } else {
-            const encryptedData = this.props.method(this.props.file.result, this.state.key);
+            let encryptedData;
+            try {
+                encryptedData = this.props.method(this.props.file.result, this.state.key);
+            } catch (e) {
+                this.props.setError(GENERIC_ERROR_TITLE, GENERIC_ERROR_MESSAGE);
+                return;
+            }
             const blob = new Blob([encryptedData], {type: "text/plain"});
             const downloadUrl = URL.createObjectURL(blob);
             this.setState({
@@ -164,3 +175,7 @@ export default class EncryptionView extends PureComponent {
         );
     }
 }
+
+const actionsMap = {setError};
+
+export default connect(null, actionsMap)(EncryptionView);
