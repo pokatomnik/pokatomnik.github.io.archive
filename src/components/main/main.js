@@ -15,6 +15,7 @@ import ThankYou from '../thank-you/thank-you';
 import RouteFAQ from '../route-faq/route-faq';
 import RouteConceit from '../route-conceit/router-conceit';
 import Route404 from '../route-404/route-404';
+import RouteFile from '../route-file/route-file';
 import './toastr-fixes.css';
 
 
@@ -36,6 +37,7 @@ export default function Main() {
                             <Route exact path="/thank-you" component={ThankYou} />
                             <Route exact path="/faq" component={RouteFAQ} />
                             <Route exact path="/conceit" component={RouteConceit} />
+                            <Route exact path="/file" component={RouteFile} />
                             <Route exact component={Route404} />
                         </Switch>
                     </Col>

@@ -1,0 +1,31 @@
+.file-input {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background-color: #2196f3;
+    border: 9px dashed #000;
+    border-radius: 5px;
+    border-style: dashed;
+    min-height: 100px;
+}
+
+.file-input__name {
+    position: absolute;
+    color: #fff;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    white-space: nowrap;
+}
+
+.file-input__input {
+    opacity: 0;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+    right: 0;
+    width: 100%;
+    cursor: pointer;
+}
