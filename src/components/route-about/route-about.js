@@ -21,15 +21,12 @@ export default function RouteAbout() {
                     <Link component={Button} bsStyle="success" to="/">
                         Try now
                     </Link>
-                    {/* <Link component={Button} bsStyle="success" to="/docs">
-                        Learn more
-                    </Link> */}
                     <a
                         className="btn btn-success"
                         href={documentationHref}
                         target="_blank"
                     >
-                        Lear more
+                        Learn more
                     </a>
                 </ButtonGroup>
                 <p>
