@@ -1,7 +1,9 @@
 import {createAction, handleActions} from 'redux-actions';
 import Backendless from 'backendless';
 import memoize from 'lodash.memoize';
+import isObject from 'lodash.isobject';
 import md5 from 'md5';
+import {push} from 'react-router-redux';
 
 import {setError} from './error';
 
@@ -45,6 +47,9 @@ export const selectGravatarUrl = memoize(
 );
 
 export const retrieveCurrentUser = () => (dispatch, getState) => {
+    if (!getTokenExists) {
+        return;
+    }
     dispatch(setIsRetrieving(true));
     Backendless.Users
         .getCurrentUser()
@@ -76,6 +81,10 @@ export const login = (email, password) => (dispatch, getState) => {
         .then(({email, name}) => {
             dispatch(setLoggingIn(false));
             dispatch(setUser({email, name}));
+            // we must not continue displaying a content which may be related
+            // to another user
+            // TODO: cleanup user pastas
+            dispatch(push('/'));
         })
         .catch(() => {
             dispatch(setLoggingIn(false));
@@ -112,3 +121,24 @@ export const reducer = handleActions({
 
     [setIsRetrieving]: (state, {payload: isRetrieving}) => ({...state, isRetrieving})
 }, initialState);
+
+
+// Helpers
+function getTokenExists() {
+    const authData = localStorage.get('Backendless');
+    if (!authData) {
+        return false;
+    }
+    let parsedAuthData;
+    try {
+        parsedAuthData = JSON.parse(authData);
+    } catch (e) {
+        return false;
+    }
+
+    if (!isObject(parsedAuthData) || !parsedAuthData['user-token']) {
+        return false;
+    }
+
+    return true;
+}
