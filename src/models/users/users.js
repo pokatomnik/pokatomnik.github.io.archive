@@ -29,9 +29,10 @@ import {
     selectIsFetchingPastas
 } from './selectors';
 import {branch} from './constants';
+import deepFreeze from '../../utils/deep-freeze';
 
 
-const initialState = {
+const initialState = deepFreeze({
     email: null,
     name: null,
     loggingIn: false,
@@ -39,7 +40,7 @@ const initialState = {
     isRetrieving: false,
     isFetchingPastas: false,
     lastPastas: []
-};
+});
 
 const reducer = handleActions({
     [setUser]: (state, {payload: {email, name}}) => ({...state, email, name}),
