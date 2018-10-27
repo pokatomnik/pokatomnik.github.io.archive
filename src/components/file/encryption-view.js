@@ -14,7 +14,7 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import Asterisk from '../common/asterisk/asterisk';
 import {encrypt, decrypt} from '../../utils/encryption';
 import DownloadButton from './download-button';
-import {setError} from '../../models/error';
+import {setError} from '../../models/error/error';
 
 
 const INVALID_FILE_ERROR = 'Add a file to encrypt.';

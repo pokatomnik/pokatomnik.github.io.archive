@@ -5,7 +5,7 @@ import {push} from 'react-router-redux';
 
 import {urlToData} from '../../utils/create-url';
 import Pasta from '../pasta/pasta';
-import {setError} from '../../models/error';
+import {setError} from '../../models/error/error';
 
 const BLOCK_NAME = 'route-pasta';
 

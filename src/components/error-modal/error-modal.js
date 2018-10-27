@@ -10,7 +10,7 @@ import {
     selectErrorMessage,
     selectErrorTitle,
     removeError
-} from '../../models/error';
+} from '../../models/error/error';
 
 ErrorModal.propTypes = {
     errorExists: PropTypes.bool.isRequired,

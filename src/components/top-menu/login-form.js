@@ -6,7 +6,7 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import Button from 'react-bootstrap/lib/Button';
 import Navbar from 'react-bootstrap/lib/Navbar';
 
-import {login} from '../../models/users';
+import {login} from '../../models/users/users';
 
 
 class LoginForm extends PureComponent {

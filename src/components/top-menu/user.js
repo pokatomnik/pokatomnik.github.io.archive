@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {
     retrieveCurrentUser,
     selectIsUserLoggedIn
-} from '../../models/users';
+} from '../../models/users/users';
 import UserMenu from './user-menu';
 import LoginForm from './login-form';
 

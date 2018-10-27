@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/lib/Col';
 
 import EncryptionView from './encryption-view';
 import {encrypt, decrypt} from '../../utils/encryption';
-import {setError} from '../../models/error';
+import {setError} from '../../models/error/error';
 
 const BLOCK_NAME = 'file';
 const GENERIC_READ_ERROR_TITLE = 'Read error';

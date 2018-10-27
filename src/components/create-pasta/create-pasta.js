@@ -11,14 +11,14 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
 import Tooltip from 'react-bootstrap/lib/Tooltip';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
-import { actions as toastrActions } from 'react-redux-toastr';
-import { Controlled as CodeMirror } from "react-codemirror2";
+import {actions as toastrActions} from 'react-redux-toastr';
+import {Controlled as CodeMirror} from "react-codemirror2";
 
 import bem from '../../utils/bem';
-import { setError } from '../../models/error';
+import {setError} from '../../models/error/error';
 import FuckAutocomplete from '../common/fuck-autocomplete/fuck-autocomplete';
 import {dataToUrl} from '../../utils/create-url';
-import { developerEmail } from '../../constants';
+import {developerEmail} from '../../constants';
 import Link from '../common/link/link';
 import Asterisk from '../common/asterisk/asterisk';
 import './modes';

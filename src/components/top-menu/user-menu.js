@@ -7,7 +7,7 @@ import Image from 'react-bootstrap/lib/Image';
 import Nav from 'react-bootstrap/lib/Nav';
 
 import bem from '../../utils/bem';
-import {logout, selectUserName, selectGravatarUrl} from '../../models/users';
+import {logout, selectUserName, selectGravatarUrl} from '../../models/users/users';
 import {BLOCK_CLASS} from './constants';
 
 

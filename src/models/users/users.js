@@ -5,7 +5,7 @@ import isObject from 'lodash.isobject';
 import md5 from 'md5';
 import {push} from 'react-router-redux';
 
-import {setError} from './error';
+import {setError} from '../error/error';
 
 
 export const branch = 'users';
@@ -64,7 +64,7 @@ export const retrieveCurrentUser = () => (dispatch, getState) => {
         })
         .catch(() => {
             dispatch(setIsRetrieving(false));
-            dispatch(setError('Can\'t retrieve current user', 'Please try to log in again'));
+            purgeToken();
         });
 };
 
@@ -124,6 +124,10 @@ export const reducer = handleActions({
 
 
 // Helpers
+function purgeToken() {
+    localStorage.removeItem('Backendless');
+}
+
 function getTokenExists() {
     const authData = localStorage.get('Backendless');
     if (!authData) {
