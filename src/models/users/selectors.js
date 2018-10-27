@@ -16,6 +16,10 @@ export const selectIsUserLoggingOut = (state) => state[branch].loggingOut;
 
 export const selectIsUserRetrieving = (state) => state[branch].isRetrieving;
 
+export const selectLastPastas = (state) => state[branch].lastPastas;
+
+export const selectIsFetchingPastas = (state) => state[branch].isFetchingPastas;
+
 export const selectGravatarUrl = memoize(
     // ?s={height}
     (state) => `https://www.gravatar.com/avatar/${md5(selectUserEmail(state))}?s=22`,

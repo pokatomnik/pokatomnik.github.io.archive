@@ -7,6 +7,10 @@ import {setError} from '../error/error';
 import {branch} from './constants';
 import {selectUserEmail} from './selectors';
 
+// LocalStorage Backendless key
+const LS_BACKENDLESS = 'Backendless';
+const TOKEN_KEY = 'user-token';
+
 export const setUser = createAction(`${branch}:setUser`);
 
 export const removeUser = createAction(`${branch}:removeUser`);
@@ -16,6 +20,17 @@ export const setLoggingIn = createAction(`${branch}:setLoggingIn`);
 export const setLoggingOut = createAction(`${branch}:setLoggingOut`);
 
 export const setIsRetrieving = createAction(`${branch}:setIsRetrieving`);
+
+export const addPasta = createAction(`${branch}:addPasta`, (pasta) => ({
+    ...pasta,
+    created: Date.now()
+}));
+
+export const forgetLastCreatedPasta = createAction(`${branch}:removeLastCreatedPasta`);
+
+export const setPastas = createAction(`${branch}:setPastas`);
+
+export const setIsFetchingPastas = createAction(`${branch}:setIsFetchingPastas`);
 
 export const retrieveCurrentUser = () => (dispatch) => {
     if (!getTokenExists()) {
@@ -32,6 +47,7 @@ export const retrieveCurrentUser = () => (dispatch) => {
             }
             const {name, email} = user;
             dispatch(setUser({email, name}));
+            dispatch(fetchLastPastas());
         })
         .catch(() => {
             dispatch(setIsRetrieving(false));
@@ -53,6 +69,7 @@ export const login = (email, password) => (dispatch, getState) => {
         .then(({email, name}) => {
             dispatch(setLoggingIn(false));
             dispatch(setUser({email, name}));
+            dispatch(fetchLastPastas());
         })
         .catch(() => {
             dispatch(setLoggingIn(false));
@@ -82,13 +99,52 @@ export const logout = () => (dispatch, getState) => {
         });
 }
 
+export const fetchLastPastas = () => (dispatch) => {
+    dispatch(setIsFetchingPastas(true));
+    const queryBuilder = Backendless.DataQueryBuilder.create();
+    // only these fields must be fetched
+    // TODO: create query string from keys of schema
+    queryBuilder.setProperties('encrypted, name, url, created');
+    Backendless.Data
+        .of('Pastas')
+        .find(queryBuilder)
+        .then((pastas) => {
+            dispatch(setIsFetchingPastas(false));
+            // we have to remove 'objectId's and '___class' fields here
+            dispatch(setPastas(pastas.map(preparePastas)));
+        })
+        .catch(() => {
+            // TODO: implement retrying here
+            dispatch(setIsFetchingPastas(false));
+            dispatch(setError('Error fetching last pastas', 'Please try refresh this page later'));
+        });
+};
+
+export const rememberPasta = ({encrypted, name, url}) => (dispatch) => {
+    dispatch(addPasta({encrypted, name, url}));
+    Backendless.Data
+        .of('Pastas')
+        .save({encrypted, name, url})
+        .then(() => {
+            // TODO: make retrying here
+            dispatch(fetchLastPastas());
+        })
+        .catch(() => {
+            dispatch(forgetLastCreatedPasta());
+        });
+}
+
 // Helpers
+function preparePastas({encrypted, name, url, created}) {
+    return {encrypted, name, url, created};
+}
+
 function purgeToken() {
-    localStorage.removeItem('Backendless');
+    localStorage.removeItem(LS_BACKENDLESS);
 }
 
 function getTokenExists() {
-    const authData = localStorage.getItem('Backendless');
+    const authData = localStorage.getItem(LS_BACKENDLESS);
     if (!authData) {
         return false;
     }
@@ -99,7 +155,7 @@ function getTokenExists() {
         return false;
     }
 
-    if (!isObject(parsedAuthData) || !parsedAuthData['user-token']) {
+    if (!isObject(parsedAuthData) || !parsedAuthData[TOKEN_KEY]) {
         return false;
     }
 
