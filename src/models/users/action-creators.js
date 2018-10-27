@@ -18,7 +18,7 @@ export const setLoggingOut = createAction(`${branch}:setLoggingOut`);
 export const setIsRetrieving = createAction(`${branch}:setIsRetrieving`);
 
 export const retrieveCurrentUser = () => (dispatch) => {
-    if (!getTokenExists) {
+    if (!getTokenExists()) {
         return;
     }
     dispatch(setIsRetrieving(true));
@@ -53,10 +53,6 @@ export const login = (email, password) => (dispatch, getState) => {
         .then(({email, name}) => {
             dispatch(setLoggingIn(false));
             dispatch(setUser({email, name}));
-            // we must not continue displaying a content which may be related
-            // to another user
-            // TODO: cleanup user pastas
-            dispatch(push('/'));
         })
         .catch(() => {
             dispatch(setLoggingIn(false));
@@ -75,6 +71,10 @@ export const logout = () => (dispatch, getState) => {
         .then(() => {
             dispatch(setLoggingOut(false));
             dispatch(removeUser());
+            // we must not continue displaying a content which may be related
+            // to another user
+            // TODO: cleanup user pastas
+            dispatch(push('/'));
         })
         .catch(() => {
             dispatch(setLoggingOut(false));
@@ -88,7 +88,7 @@ function purgeToken() {
 }
 
 function getTokenExists() {
-    const authData = localStorage.get('Backendless');
+    const authData = localStorage.getItem('Backendless');
     if (!authData) {
         return false;
     }
