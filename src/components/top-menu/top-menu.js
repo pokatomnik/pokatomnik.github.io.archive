@@ -1,6 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Nav from 'react-bootstrap/lib/Nav';
 import NavItem from 'react-bootstrap/lib/NavItem';
@@ -9,18 +7,12 @@ import MenuItem from 'react-bootstrap/lib/MenuItem';
 import Link from '../common/link/link';
 
 import bem from '../../utils/bem';
-import LoginForm from './login-form';
-import UserMenu from './user-menu';
+import User from './user';
 import './top-menu.css';
 import {documentationHref} from '../../constants';
-import {selectIsUserLoggedIn} from '../../models/users';
 import {BLOCK_CLASS} from './constants';
 
-TopMenu.propTypes = {
-    isUserLoggedIn: PropTypes.bool.isRequired
-};
-
-function TopMenu({isUserLoggedIn}) {
+export default function TopMenu() {
     return (
         <Navbar collapseOnSelect inverse className={bem(BLOCK_CLASS).toString()}>
             <Navbar.Header>
@@ -79,19 +71,8 @@ function TopMenu({isUserLoggedIn}) {
                         Feedback
                     </Link>
                 </Nav>
-                {!isUserLoggedIn && (
-                    <LoginForm />
-                )}
-                {isUserLoggedIn && (
-                    <UserMenu />
-                )}
+                <User />
             </Navbar.Collapse>
         </Navbar>
     );
 }
-
-const mapStateToProps = (state) => ({
-    isUserLoggedIn: selectIsUserLoggedIn(state)
-});
-
-export default connect(mapStateToProps)(TopMenu);
