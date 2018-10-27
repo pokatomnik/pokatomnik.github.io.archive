@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import Button from 'react-bootstrap/lib/Button';
@@ -16,6 +16,7 @@ import {Controlled as CodeMirror} from "react-codemirror2";
 
 import bem from '../../utils/bem';
 import {setError} from '../../models/error/error';
+import {rememberPasta} from '../../models/users/users';
 import FuckAutocomplete from '../common/fuck-autocomplete/fuck-autocomplete';
 import {dataToUrl} from '../../utils/create-url';
 import {developerEmail} from '../../constants';
@@ -63,7 +64,8 @@ const overlayTooltipNotEncrypted = (
 class CreatePasta extends PureComponent {
     static propTypes = {
         setError: PropTypes.func.isRequired,
-        addToastr: PropTypes.func.isRequired
+        addToastr: PropTypes.func.isRequired,
+        rememberPasta: PropTypes.func.isRequired
     };
 
     static getInitialState() {
@@ -141,6 +143,11 @@ class CreatePasta extends PureComponent {
         dataToUrl(name, text, key)
             .then((compressed) => {
                 const url = `/pasta/${compressed}`;
+                this.props.rememberPasta({
+                    name,
+                    url,
+                    encrypted: Boolean(key)
+                });
                 this.props.addToastr({
                     type: 'light',
                     title: name || 'Unnamed',
@@ -295,6 +302,7 @@ class CreatePasta extends PureComponent {
 }
 
 const actionsMap = {
+    rememberPasta,
     setError,
     addToastr: toastrActions.add
 };

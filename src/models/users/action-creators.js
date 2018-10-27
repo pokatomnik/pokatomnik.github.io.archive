@@ -105,6 +105,7 @@ export const fetchLastPastas = () => (dispatch) => {
     // only these fields must be fetched
     // TODO: create query string from keys of schema
     queryBuilder.setProperties('encrypted, name, url, created');
+    queryBuilder.setSortBy(['created DESC']);
     Backendless.Data
         .of('Pastas')
         .find(queryBuilder)
