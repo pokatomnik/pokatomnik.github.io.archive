@@ -1,3 +1,7 @@
 .top-menu {
     border-radius: 0;
 }
+
+.top-menu__gravatar {
+    height: 22px;
+}
