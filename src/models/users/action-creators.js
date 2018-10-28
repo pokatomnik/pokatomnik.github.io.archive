@@ -10,6 +10,7 @@ import {selectUserEmail} from './selectors';
 // LocalStorage Backendless key
 const LS_BACKENDLESS = 'Backendless';
 const TOKEN_KEY = 'user-token';
+const PASTAS_COUNT_PER_USER = 50;
 
 export const setUser = createAction(`${branch}:setUser`);
 
@@ -120,18 +121,22 @@ export const fetchLastPastas = () => (dispatch) => {
         });
 };
 
-export const rememberPasta = ({encrypted, name, url}) => (dispatch) => {
+export const rememberPasta = ({encrypted, name, url}) => async (dispatch) => {
+    try {
+        await removeTheOldestPastaIfLimitExceeded(PASTAS_COUNT_PER_USER);
+    } catch (e) {
+        // okay-face.jpg
+    }
     dispatch(addPasta({encrypted, name, url}));
-    Backendless.Data
-        .of('Pastas')
-        .save({encrypted, name, url})
-        .then(() => {
-            // TODO: make retrying here
-            dispatch(fetchLastPastas());
-        })
-        .catch(() => {
-            dispatch(forgetLastCreatedPasta());
-        });
+    try {
+        await Backendless.Data
+            .of('Pastas')
+            .save({encrypted, name, url});
+        // TODO: make retrying here
+        dispatch(fetchLastPastas());
+    } catch (e) {
+        dispatch(forgetLastCreatedPasta());
+    }
 }
 
 // Helpers
@@ -160,4 +165,28 @@ function getTokenExists() {
     }
 
     return true;
+}
+
+function getPastasCount() {
+    return Backendless.Data.of('Pastas').getObjectCount();
+}
+
+function getOldestPasta() {
+    const queryBuilder = Backendless.DataQueryBuilder.create();
+    queryBuilder.setSortBy(['created']);
+    return Backendless.Data.of('Pastas').findFirst(queryBuilder);
+}
+
+function removePasta(objectId) {
+    return Backendless.Data.of('Pastas').remove({objectId});
+}
+
+async function removeTheOldestPastaIfLimitExceeded(limit) {
+    const pastasCount = await getPastasCount();
+    if (pastasCount < limit) {
+        return;
+    }
+    const {objectId: objectIdOfOldestPasta} = await getOldestPasta();
+    await removePasta(objectIdOfOldestPasta);
+    return;
 }
