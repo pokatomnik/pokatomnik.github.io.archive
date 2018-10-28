@@ -5,3 +5,12 @@ a {
 .btn:hover {
     border: 0px!important;
 }
+
+/* Remove ugly Chrome autofill input style */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-transition-delay: 9999s !important;
+    -webkit-transition: color 9999s ease-out, background-color 9999s ease-out !important;
+}

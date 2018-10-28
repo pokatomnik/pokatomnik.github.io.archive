@@ -7,11 +7,10 @@ import MenuItem from 'react-bootstrap/lib/MenuItem';
 import Link from '../common/link/link';
 
 import bem from '../../utils/bem';
+import User from './user';
 import './top-menu.css';
-import { documentationHref } from '../../constants';
-
-
-const BLOCK_CLASS = 'top-menu';
+import {documentationHref} from '../../constants';
+import {BLOCK_CLASS} from './constants';
 
 export default function TopMenu() {
     return (
@@ -43,35 +42,36 @@ export default function TopMenu() {
                             href={documentationHref}
                             target="_blank"
                         >
-                            Documentation
+                            Wiki
                         </MenuItem>
                         <Link to="/faq" component={MenuItem}>
                             FAQ
+                        </Link>
+                        <MenuItem
+                            href="https://github.com/pokatomnik/pokatomnik.github.io"
+                            target="_blank"
+                        >
+                            Source code
+                        </MenuItem>
+                        <Link
+                            component={MenuItem}
+                            to="/conceit"
+                        >
+                            Conceit
                         </Link>
                         <MenuItem divider />
                         <Link to="/about" component={MenuItem}>
                             About Pasta
                         </Link>
                     </NavDropdown>
-                    <NavItem
-                        href="https://github.com/pokatomnik/pokatomnik.github.io"
-                        target="_blank"
-                    >
-                        Source code
-                    </NavItem>
                     <Link
                         component={NavItem}
                         to="/feedback"
                     >
                         Feedback
                     </Link>
-                    <Link
-                        component={NavItem}
-                        to="/conceit"
-                    >
-                        Conceit
-                    </Link>
                 </Nav>
+                <User />
             </Navbar.Collapse>
         </Navbar>
     );

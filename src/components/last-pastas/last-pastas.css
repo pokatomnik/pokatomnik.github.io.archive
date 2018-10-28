@@ -1,0 +1,6 @@
+.last-pastas__underlined,
+.last-pastas__underlined:hover
+.last-pastas__underlined:active
+.last-pastas__underlined:focus {
+    text-decoration: underline;
+}

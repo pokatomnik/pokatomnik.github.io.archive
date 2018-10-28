@@ -1,0 +1,22 @@
+.last-pasta,
+.last-pasta * {
+    cursor: pointer;
+}
+
+.last-pasta:hover .last-pasta__link {
+    text-decoration: underline;
+}
+
+.last-pasta__icon {
+    line-height: 24px;
+}
+
+.last-pasta__title {
+    white-space: nowrap;
+    max-width: 70%;
+    color: #dddddd;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    margin: 23px auto;
+}
