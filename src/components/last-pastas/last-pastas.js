@@ -12,7 +12,12 @@ import {
     selectIsUserLoggingIn,
     selectIsUserRetrieving
 } from '../../models/users/users';
+import Link from '../common/link/link';
+import bem from '../../utils/bem';
+import './last-pastas.css';
 
+
+const BLOCK_CLASS = 'last-pastas';
 const ITEMS_PER_LINE = 2;
 
 LastPastas.propTypes = {
@@ -46,6 +51,19 @@ function LastPastas({
             <h2>
                 Please, wait...
             </h2>
+        );
+    }
+
+    if (!lastPastas.length) {
+        return (
+            <React.Fragment>
+                <h2>
+                    You have not <Link
+                        className={bem(BLOCK_CLASS, 'underlined')}
+                        to="/"
+                    >create</Link>d any pastas yet.
+                </h2>
+            </React.Fragment>
         );
     }
 
