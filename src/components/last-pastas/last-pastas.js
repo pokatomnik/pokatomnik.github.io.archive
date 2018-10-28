@@ -36,7 +36,7 @@ function LastPastas({
     if (!isUserLoggedIn && !isUserLoggingIn && !isUserRetrieving) {
         return (
             <h2>
-                You're not logged in. Please do It first.
+                You are not logged in. Please do It first.
             </h2>
         );
     }
