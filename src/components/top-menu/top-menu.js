@@ -42,7 +42,7 @@ export default function TopMenu() {
                             href={documentationHref}
                             target="_blank"
                         >
-                            Documentation
+                            Wiki
                         </MenuItem>
                         <Link to="/faq" component={MenuItem}>
                             FAQ

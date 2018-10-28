@@ -9,6 +9,7 @@ import Nav from 'react-bootstrap/lib/Nav';
 import bem from '../../utils/bem';
 import {logout, selectUserName, selectGravatarUrl} from '../../models/users/users';
 import {BLOCK_CLASS} from './constants';
+import Link from '../common/link/link';
 
 
 UserMenu.propTypes = {
@@ -36,6 +37,9 @@ function UserMenu({name, logout, gravatarUrl}) {
     return (
         <Nav pullRight>
             <NavDropdown title={title} id="user-menu">
+                <Link to="/last-pastas" component={MenuItem}>
+                    My last Pastas
+                </Link>
                 <MenuItem disabled>
                     Profile
                 </MenuItem>

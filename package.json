@@ -10,6 +10,7 @@
         "highlight.js": "^9.12.0",
         "history": "^4.7.2",
         "lodash.capitalize": "^4.2.1",
+        "lodash.chunk": "^4.2.0",
         "lodash.find": "^4.6.0",
         "lodash.isobject": "^3.0.2",
         "lodash.memoize": "^4.1.2",
