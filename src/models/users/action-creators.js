@@ -90,7 +90,6 @@ export const logout = () => (dispatch, getState) => {
             dispatch(removeUser());
             // we must not continue displaying a content which may be related
             // to another user
-            // TODO: cleanup user pastas
             dispatch(push('/'));
         })
         .catch(() => {
