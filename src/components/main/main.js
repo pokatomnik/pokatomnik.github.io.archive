@@ -17,6 +17,7 @@ import RouteConceit from '../route-conceit/router-conceit';
 import Route404 from '../route-404/route-404';
 import RouteFile from '../route-file/route-file';
 import RouteLastPastas from '../route-last-pastas/route-last-pastas';
+import RouteRegistration from '../route-registration/route-registration';
 import './toastr-fixes.css';
 
 
@@ -40,6 +41,7 @@ export default function Main() {
                             <Route exact path="/conceit" component={RouteConceit} />
                             <Route exact path="/file" component={RouteFile} />
                             <Route exact path="/last-pastas" component={RouteLastPastas} />
+                            <Route exact path="/registration" component={RouteRegistration} />
                             <Route exact component={Route404} />
                         </Switch>
                     </Col>

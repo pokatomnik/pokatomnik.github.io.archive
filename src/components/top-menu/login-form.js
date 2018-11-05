@@ -5,6 +5,8 @@ import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
 import Button from 'react-bootstrap/lib/Button';
 import Navbar from 'react-bootstrap/lib/Navbar';
+import Link from '../common/link/link';
+import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 
 import {login} from '../../models/users/users';
 
@@ -60,9 +62,19 @@ class LoginForm extends PureComponent {
                             bsSize="small"
                         />
                     </FormGroup>
-                    <Button type="submit" bsStyle="success" bsSize="small">
-                        Log in
-                    </Button>
+                    <ButtonGroup>
+                        <Button type="submit" bsStyle="success" bsSize="small">
+                            Log in
+                        </Button>
+                        <Link
+                            component={Button}
+                            to="/registration"
+                            bsStyle="success"
+                            bsSize="small"
+                        >
+                            Sign up
+                        </Link>
+                    </ButtonGroup>
                 </form>
             </Navbar.Form>
         );
