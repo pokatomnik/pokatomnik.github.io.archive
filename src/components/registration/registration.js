@@ -1,4 +1,6 @@
 import React, {PureComponent} from 'react';
+import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
@@ -8,6 +10,11 @@ import FormControl from 'react-bootstrap/lib/FormControl';
 import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 import HelpBlock from 'react-bootstrap/lib/HelpBlock';
 import isEmpty from 'lodash.isempty';
+
+import {
+    registerUser,
+    selectIsRegistering
+} from '../../models/users/users';
 
 
 const BLOCK_NAME = 'registration';
@@ -22,7 +29,12 @@ const emailRegexp = (
     /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
 );
 
-export default class Registration extends PureComponent {
+class Registration extends PureComponent {
+    static propTypes = {
+        isRegistering: PropTypes.bool.isRequired,
+        registerUser: PropTypes.func.isRequired
+    };
+
     static getValidationState(err) {
         if (err) {
             return 'error';
@@ -30,13 +42,19 @@ export default class Registration extends PureComponent {
     }
 
     state = {
+        name: '',
         email: '',
         password: '',
         passwordRepeat: '',
 
+        nameError: '',
         emailError: '',
         passwordError: ''
     };
+
+    handleNameChange = ({target: {value: name}}) => {
+        this.setState(() => ({name, nameError: NO_ERROR}));
+    }
 
     handleEmailChange = ({target: {value: email}}) => {
         this.setState(() => ({email, emailError: NO_ERROR}));
@@ -52,7 +70,11 @@ export default class Registration extends PureComponent {
 
     validateForm = () => {
         const result = {};
-        const {email, password, passwordRepeat} = this.state;
+        const {name, email, password, passwordRepeat} = this.state;
+        if (!name) {
+            result.nameError = EMPTY_FIELD;
+        }
+
         if (!email) {
             result.emailError = EMPTY_FIELD;
         } else if (!emailRegexp.test(email)) {
@@ -79,12 +101,19 @@ export default class Registration extends PureComponent {
         evt.stopPropagation();
         const validationResult = this.validateForm();
         if (!validationResult) {
-            // implement logic here
+            const {name, email, password} = this.state;
+            this.props.registerUser({
+                name,
+                email,
+                password
+            });
+        } else {
+            this.setState(() => (validationResult));
         }
-        this.setState(() => (validationResult));
     }
 
     render() {
+        const {isRegistering} = this.props;
         return (
             <Row className={BLOCK_NAME}>
                 <Col md={2} />
@@ -99,12 +128,32 @@ export default class Registration extends PureComponent {
                 <Col md={4}>
                     <form onSubmit={this.handleSubmit}>
                         <FormGroup
+                            validationState={Registration.getValidationState(this.state.nameError)}
+                        >
+                            <ControlLabel>
+                                Name
+                            </ControlLabel>
+                            <FormControl
+                                disabled={isRegistering}
+                                placeholder="John Doe"
+                                type="text"
+                                value={this.state.name}
+                                onChange={this.handleNameChange}
+                            />
+                            {this.state.nameError && (
+                                <HelpBlock>
+                                    {this.state.nameError}
+                                </HelpBlock>
+                            )}
+                        </FormGroup>
+                        <FormGroup
                             validationState={Registration.getValidationState(this.state.emailError)}
                         >
                             <ControlLabel>
                                 Email
                             </ControlLabel>
                             <FormControl
+                                disabled={isRegistering}
                                 placeholder="john.doe@example.com"
                                 type="text"
                                 value={this.state.email}
@@ -123,6 +172,7 @@ export default class Registration extends PureComponent {
                                 Password
                             </ControlLabel>
                             <FormControl
+                                disabled={isRegistering}
                                 type="password"
                                 placeholder={STRONG_PASSWORD}
                                 value={this.state.password}
@@ -137,6 +187,7 @@ export default class Registration extends PureComponent {
                                 Repeat password
                             </ControlLabel>
                             <FormControl
+                                disabled={isRegistering}
                                 type="password"
                                 placeholder={STRONG_PASSWORD}
                                 value={this.state.passwordRepeat}
@@ -144,7 +195,13 @@ export default class Registration extends PureComponent {
                             />
                         </FormGroup>
                         <ButtonGroup vertical block>
-                            <Button bsStyle="success" type="submit">Sign up</Button>
+                            <Button
+                                bsStyle="success"
+                                type="submit"
+                                disabled={isRegistering}
+                            >
+                                Sign up
+                            </Button>
                         </ButtonGroup>
                     </form>
                 </Col>
@@ -153,3 +210,11 @@ export default class Registration extends PureComponent {
         );
     }
 }
+
+const mapStateToProps = (state) => ({
+    isRegistering: selectIsRegistering(state)
+})
+
+const actionsMap = {registerUser};
+
+export default connect(mapStateToProps, actionsMap)(Registration);

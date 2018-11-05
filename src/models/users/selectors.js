@@ -20,6 +20,8 @@ export const selectLastPastas = (state) => state[branch].lastPastas;
 
 export const selectIsFetchingPastas = (state) => state[branch].isFetchingPastas;
 
+export const selectIsRegistering = (state) => state[branch].isRegistering;
+
 export const selectGravatarUrl = memoize(
     // ?s={height}
     (state) => `https://www.gravatar.com/avatar/${md5(selectUserEmail(state))}?s=22`,

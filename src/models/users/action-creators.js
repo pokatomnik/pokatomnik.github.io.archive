@@ -22,6 +22,8 @@ export const setLoggingOut = createAction(`${branch}:setLoggingOut`);
 
 export const setIsRetrieving = createAction(`${branch}:setIsRetrieving`);
 
+export const setIsRegistering = createAction(`${branch}:setIsRegistering`);
+
 export const addPasta = createAction(`${branch}:addPasta`, (pasta) => ({
     ...pasta,
     created: Date.now()
@@ -32,6 +34,33 @@ export const forgetLastCreatedPasta = createAction(`${branch}:removeLastCreatedP
 export const setPastas = createAction(`${branch}:setPastas`);
 
 export const setIsFetchingPastas = createAction(`${branch}:setIsFetchingPastas`);
+
+export const registerUser = ({
+    name,
+    email,
+    password
+}) => (dispatch) => {
+    const newUser = new Backendless.User();
+    newUser.name = name;
+    newUser.email = email;
+    newUser.password = password;
+
+    dispatch(setIsRegistering(true));
+    Backendless.UserService
+        .register(newUser)
+        .then(() => {
+            dispatch(push('/registration/check-email'));
+        })
+        .catch(() => {
+            dispatch(setError(
+                'Unable to signup',
+                'Please try again later and leave a feedback'
+            ));
+        })
+        .finally(() => {
+            dispatch(setIsRegistering(false));
+        });
+}
 
 export const retrieveCurrentUser = () => (dispatch) => {
     if (!getTokenExists()) {
