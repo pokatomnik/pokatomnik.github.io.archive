@@ -5,3 +5,11 @@
 .top-menu__gravatar {
     height: 22px;
 }
+
+/*
+    This fix is required for showing the dropdown in the top bar.
+    Menu will not be shown without it (cropped by navbar edges)
+*/
+.navbar-collapse.collapse.in {
+    overflow-y: visible;
+}
