@@ -1,5 +1,6 @@
 import Backendless from 'backendless';
 import isObject from 'lodash.isobject';
+import cloneDeep from 'lodash.clonedeep';
 import {push} from 'react-router-redux';
 import {createAction} from 'redux-actions';
 import {actions as toastrActions} from 'react-redux-toastr';
@@ -7,11 +8,13 @@ import {actions as toastrActions} from 'react-redux-toastr';
 import {setError} from '../error/error';
 import {branch} from './constants';
 import {selectUserEmail} from './selectors';
+import {selectLastPastas} from './users';
 
 // LocalStorage Backendless key
 const LS_BACKENDLESS = 'Backendless';
 const TOKEN_KEY = 'user-token';
 const PASTAS_COUNT_PER_USER = 50;
+const MAX_PAGE_SIZE = 100;
 
 export const setUser = createAction(`${branch}:setUser`);
 
@@ -27,6 +30,7 @@ export const setIsRegistering = createAction(`${branch}:setIsRegistering`);
 
 export const addPasta = createAction(`${branch}:addPasta`, (pasta) => ({
     ...pasta,
+    objectId: null,
     created: Date.now()
 }));
 
@@ -37,6 +41,37 @@ export const setPastas = createAction(`${branch}:setPastas`);
 export const setIsFetchingPastas = createAction(`${branch}:setIsFetchingPastas`);
 
 export const setIsResettingPassword = createAction(`${branch}:setIsResettingPassword`);
+
+export const setIsRemovingLastPasta = createAction(`${branch}:setIsRemovingLastPasta`);
+
+export const removeLastPastaById = (objectId) => (dispatch, getState) => {
+    // If this pasta is not remembered, do not try to remove It.
+    if (!objectId) {
+        return;
+    }
+    const state = getState();
+    const lastPastas = selectLastPastas(state);
+    const currentPastas = cloneDeep(lastPastas);
+    // Optimistic update
+    dispatch(
+        setPastas(
+            currentPastas.filter(({objectId: lastPastaObjectId}) => objectId !== lastPastaObjectId)
+        )
+    );
+    dispatch(setIsRemovingLastPasta(true));
+    removePasta(objectId)
+        .then(() => {
+            // Removing successful, refresh all pastas from backend
+            dispatch(fetchLastPastas());
+        })
+        .catch(() => {
+            // Removing failed, restore old last pasta list
+            dispatch(setPastas(currentPastas));
+        })
+        .finally(() => {
+            dispatch(setIsRemovingLastPasta(false));
+        });
+};
 
 export const resetPassword = (email) => (dispatch) => {
     dispatch(setIsResettingPassword(true));
@@ -164,6 +199,7 @@ export const fetchLastPastas = () => (dispatch) => {
     // TODO: create query string from keys of schema
     queryBuilder.setProperties('encrypted, name, url, created');
     queryBuilder.setSortBy(['created DESC']);
+    queryBuilder.setPageSize(MAX_PAGE_SIZE);
     Backendless.Data
         .of('Pastas')
         .find(queryBuilder)
@@ -198,8 +234,8 @@ export const rememberPasta = ({encrypted, name, url}) => async (dispatch) => {
 }
 
 // Helpers
-function preparePastas({encrypted, name, url, created}) {
-    return {encrypted, name, url, created};
+function preparePastas({encrypted, name, url, created, objectId}) {
+    return {encrypted, name, url, created, objectId};
 }
 
 function purgeToken() {
