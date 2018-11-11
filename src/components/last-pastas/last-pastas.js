@@ -25,7 +25,8 @@ LastPastas.propTypes = {
         url: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
         created: PropTypes.number.isRequired,
-        encrypted: PropTypes.bool.isRequired
+        encrypted: PropTypes.bool.isRequired,
+        objectId: PropTypes.string
     })).isRequired,
     isUserLoggedIn: PropTypes.bool.isRequired,
     isUserLoggingIn: PropTypes.bool.isRequired,
@@ -69,13 +70,14 @@ function LastPastas({
 
     return chunk(lastPastas, ITEMS_PER_LINE).map((chunk, index) => (
         <Row key={index}>
-            {chunk.map(({encrypted, created, url, name}) => (
+            {chunk.map(({encrypted, created, url, name, objectId}) => (
                 <Col md={Math.round(12 / ITEMS_PER_LINE)} key={created}>
                     <LastPasta
                         encrypted={encrypted}
                         created={created}
                         url={url}
                         name={name}
+                        objectId={objectId}
                     />
                 </Col>
             ))}

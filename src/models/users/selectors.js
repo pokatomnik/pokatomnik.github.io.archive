@@ -24,6 +24,8 @@ export const selectIsRegistering = (state) => state[branch].isRegistering;
 
 export const selectIsResettingPassword = (state) => state[branch].isResettingPassword;
 
+export const selectIsRemovingLastPasta = (state) => state[branch].isRemovingLastPasta;
+
 export const selectGravatarUrl = memoize(
     // ?s={height}
     (state) => `https://www.gravatar.com/avatar/${md5(selectUserEmail(state))}?s=22`,

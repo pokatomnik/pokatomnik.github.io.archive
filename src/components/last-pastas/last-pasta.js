@@ -5,6 +5,11 @@ import {push} from 'react-router-redux';
 import Panel from 'react-bootstrap/lib/Panel';
 
 import IconWithTooltip from '../common/icon-with-tooltip/icon-with-tooltip';
+import {
+    removeLastPastaById,
+    selectIsRemovingLastPasta,
+    selectIsFetchingPastas
+} from '../../models/users/users';
 import bem from '../../utils/bem';
 import './last-pasta.css';
 
@@ -19,11 +24,15 @@ const BLOCK_CLASS = 'last-pasta';
 
 class LastPasta extends PureComponent {
     static propTypes = {
+        removeLastPastaById: PropTypes.func.isRequired,
+        objectId: PropTypes.string.isRequired,
         url: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
         encrypted: PropTypes.bool.isRequired,
         created: PropTypes.number.isRequired,
-        push: PropTypes.func.isRequired
+        push: PropTypes.func.isRequired,
+        isRemovingLastPasta: PropTypes.bool.isRequired,
+        isFetchingPastas: PropTypes.bool.isRequired
     };
 
     go = (evt) => {
@@ -32,25 +41,56 @@ class LastPasta extends PureComponent {
         this.props.push(this.props.url);
     }
 
+    removeLastPastaById = () => {
+        this.props.removeLastPastaById(this.props.objectId);
+    }
+
+    renderRemoveIcon = (iconClassString) => {
+        const {
+            isRemovingLastPasta,
+            isFetchingPastas,
+            objectId
+        } = this.props;
+        const disabled = isRemovingLastPasta || isFetchingPastas;
+        const clickHandler = disabled
+            ? null
+            : this.removeLastPastaById;
+        const tooltipText = disabled
+            ? 'Please wait a second'
+            : 'Remove this pasta';
+        const glyph = disabled
+            ? 'hourglass'
+            : 'remove'
+        return (
+            <IconWithTooltip
+                id={`remove-pasta-${objectId}`}
+                glyph={glyph}
+                className={iconClassString}
+                tooltipText={tooltipText}
+                onClick={clickHandler}
+                tabIndex={-1}
+                aria-disabled={disabled}
+            />
+        )
+    }
+
     render() {
         const {
             name,
             encrypted,
-            created
+            created,
+            objectId
         } = this.props;
-        const iconClassString = bem(BLOCK_CLASS, 'icon').addClasses('pull-right').toString();
+        const iconClassString = 'pull-right';
         return (
             <Panel>
                 <Panel.Heading>
                     <Panel.Title>
                         {formatDate(created)}
-                        <IconWithTooltip
-                            glyph="remove"
-                            className={iconClassString}
-                            tooltipText="Remove tooltip"
-                        />
+                        {this.renderRemoveIcon(iconClassString)}
                         {encrypted && (
                             <IconWithTooltip
+                                id={`is-encrypted-${objectId}`}
                                 className={iconClassString}
                                 glyph="lock"
                                 tooltipText="This pasta is encrypted"
@@ -71,6 +111,11 @@ class LastPasta extends PureComponent {
     }
 }
 
-const actionsMap = {push};
+const mapStateToProps = (state) => ({
+    isRemovingLastPasta: selectIsRemovingLastPasta(state),
+    isFetchingPastas: selectIsFetchingPastas(state)
+});
 
-export default connect(null, actionsMap)(LastPasta);
+const actionsMap = {push, removeLastPastaById};
+
+export default connect(mapStateToProps, actionsMap)(LastPasta);
