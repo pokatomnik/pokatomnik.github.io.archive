@@ -11,9 +11,10 @@ const API_KEY = 'D7E605B3-57C4-82FB-FF55-6D3E8E08BD00';
 Backendless.serverURL = 'https://api.backendless.com';
 Backendless.initApp(APP_ID, API_KEY);
 
-if (!window.Promise) {
-    window.Promise = Promise;
-}
+// Bluebird is required for .finally Promise method
+// (not supported in older browsers)
+// And as a good Promise polyfill
+window.Promise = Promise;
 
 ReactDOM.render(
   <App />,

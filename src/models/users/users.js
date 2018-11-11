@@ -6,6 +6,8 @@ import {
     retrieveCurrentUser,
     fetchLastPastas,
     rememberPasta,
+    registerUser,
+    resetPassword,
     // sync action creators
     removeUser,
     setIsRetrieving,
@@ -15,7 +17,9 @@ import {
     addPasta,
     setPastas,
     setIsFetchingPastas,
-    forgetLastCreatedPasta
+    forgetLastCreatedPasta,
+    setIsRegistering,
+    setIsResettingPassword
 } from './action-creators';
 import {
     selectUserEmail,
@@ -26,7 +30,9 @@ import {
     selectIsUserRetrieving,
     selectGravatarUrl,
     selectLastPastas,
-    selectIsFetchingPastas
+    selectIsFetchingPastas,
+    selectIsRegistering,
+    selectIsResettingPassword
 } from './selectors';
 import {branch} from './constants';
 import deepFreeze from '../../utils/deep-freeze';
@@ -39,6 +45,8 @@ const initialState = deepFreeze({
     loggingOut: false,
     isRetrieving: false,
     isFetchingPastas: false,
+    isRegistering: false,
+    isResettingPassword: false,
     lastPastas: []
 });
 
@@ -80,6 +88,16 @@ const reducer = handleActions({
     [setIsFetchingPastas]: (state, {payload: isFetchingPastas}) => ({
         ...state,
         isFetchingPastas
+    }),
+
+    [setIsRegistering]: (state, {payload: isRegistering}) => ({
+        ...state,
+        isRegistering
+    }),
+
+    [setIsResettingPassword]: (state, {payload: isResettingPassword}) => ({
+        ...state,
+        isResettingPassword
     })
 }, initialState);
 
@@ -95,10 +113,14 @@ export {
     selectGravatarUrl,
     selectLastPastas,
     selectIsFetchingPastas,
+    selectIsRegistering,
+    selectIsResettingPassword,
     login,
     logout,
     retrieveCurrentUser,
     addPasta,
     fetchLastPastas,
-    rememberPasta
+    rememberPasta,
+    registerUser,
+    resetPassword
 };
