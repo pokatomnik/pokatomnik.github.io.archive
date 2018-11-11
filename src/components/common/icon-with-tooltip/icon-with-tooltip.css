@@ -1,0 +1,14 @@
+.icon-with-tooltip__icon {
+    line-height: 24px;
+    color: #656565;
+    margin-left: 3px;
+    transition-duration: .2s;
+}
+
+.icon-with-tooltip__icon:hover {
+    color: #000;
+}
+
+.icon-with-tooltip__icon--clickable {
+    cursor: pointer;
+}

@@ -1,5 +1,5 @@
-.last-pasta,
-.last-pasta * {
+.last-pasta__last-pasta-body,
+.last-pasta__last-pasta-body * {
     cursor: pointer;
 }
 
@@ -7,16 +7,17 @@
     text-decoration: underline;
 }
 
-.last-pasta__icon {
-    line-height: 24px;
-}
-
 .last-pasta__title {
     white-space: nowrap;
     max-width: 70%;
-    color: #dddddd;
+    color: #ddd;
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: center;
     margin: 23px auto;
+    transition-duration: .2s;
+}
+
+.last-pasta__last-pasta-body:hover .last-pasta__title {
+    color: #aaa;
 }

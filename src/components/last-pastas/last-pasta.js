@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {push} from 'react-router-redux';
 import Panel from 'react-bootstrap/lib/Panel';
-import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 
+import IconWithTooltip from '../common/icon-with-tooltip/icon-with-tooltip';
 import bem from '../../utils/bem';
 import './last-pasta.css';
 
@@ -40,20 +40,28 @@ class LastPasta extends PureComponent {
         } = this.props;
         const iconClassString = bem(BLOCK_CLASS, 'icon').addClasses('pull-right').toString();
         return (
-            <Panel onClick={this.go} className={BLOCK_CLASS}>
+            <Panel>
                 <Panel.Heading>
                     <Panel.Title>
                         {formatDate(created)}
+                        <IconWithTooltip
+                            glyph="remove"
+                            className={iconClassString}
+                            tooltipText="Remove tooltip"
+                        />
                         {encrypted && (
-                            // TODO: make a hint here (popover maybe?)
-                            <Glyphicon
+                            <IconWithTooltip
                                 className={iconClassString}
-                                glyph="glyphicon glyphicon-lock"
+                                glyph="lock"
+                                tooltipText="This pasta is encrypted"
                             />
                         )}
                     </Panel.Title>
                 </Panel.Heading>
-                <Panel.Body>
+                <Panel.Body
+                    onClick={this.go}
+                    className={bem(BLOCK_CLASS, 'last-pasta-body').toString()}
+                >
                     <h3 className={bem(BLOCK_CLASS, 'title')}>
                         {name}
                     </h3>
