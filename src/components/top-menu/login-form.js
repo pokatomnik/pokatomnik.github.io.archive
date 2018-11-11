@@ -3,17 +3,21 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import FormGroup from 'react-bootstrap/lib/FormGroup';
 import FormControl from 'react-bootstrap/lib/FormControl';
-import Button from 'react-bootstrap/lib/Button';
 import Navbar from 'react-bootstrap/lib/Navbar';
 import Link from '../common/link/link';
-import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
+import SplitButton from 'react-bootstrap/lib/SplitButton';
+import MenuItem from 'react-bootstrap/lib/MenuItem';
 
-import {login} from '../../models/users/users';
+import {
+    login,
+    selectIsUserLoggingIn
+} from '../../models/users/users';
 
 
 class LoginForm extends PureComponent {
     static propTypes = {
-        login: PropTypes.func.isRequired
+        login: PropTypes.func.isRequired,
+        isUserLoggingIn: PropTypes.bool.isRequired
     };
 
     constructor(props) {
@@ -41,6 +45,7 @@ class LoginForm extends PureComponent {
     }
 
     render() {
+        const {isUserLoggingIn: disabled} = this.props;
         return (
             <Navbar.Form pullRight>
                 <form onSubmit={this.login}>
@@ -51,6 +56,7 @@ class LoginForm extends PureComponent {
                             value={this.state.email}
                             onChange={this.onEmailChange}
                             bsSize="small"
+                            disabled={disabled}
                         />
                     </FormGroup>
                     <FormGroup>
@@ -60,35 +66,40 @@ class LoginForm extends PureComponent {
                             value={this.state.password}
                             onChange={this.onPasswordChange}
                             bsSize="small"
+                            disabled={disabled}
                         />
                     </FormGroup>
-                    <ButtonGroup>
-                        <Button type="submit" bsStyle="success" bsSize="small">
-                            Log in
-                        </Button>
+                    <SplitButton
+                        type="submit"
+                        bsStyle="success"
+                        bsSize="small"
+                        title="Log in"
+                        id="login-button"
+                        disabled={disabled}
+                    >
                         <Link
-                            component={Button}
+                            component={MenuItem}
                             to="/registration"
-                            bsStyle="success"
-                            bsSize="small"
                         >
                             Sign up
                         </Link>
                         <Link
-                            component={Button}
+                            component={MenuItem}
                             to="/reset-password"
-                            bsStyle="warning"
-                            bsSize="small"
                         >
                             Reset password
                         </Link>
-                    </ButtonGroup>
+                    </SplitButton>
                 </form>
             </Navbar.Form>
         );
     }
 }
 
+const mapStateToProps = (state) => ({
+    isUserLoggingIn: selectIsUserLoggingIn(state)
+});
+
 const actionsMap = {login};
 
-export default connect(null, actionsMap)(LoginForm);
+export default connect(mapStateToProps, actionsMap)(LoginForm);
