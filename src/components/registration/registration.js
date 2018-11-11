@@ -15,6 +15,7 @@ import {
     registerUser,
     selectIsRegistering
 } from '../../models/users/users';
+import isEmail from '../../utils/is-email';
 
 
 const BLOCK_NAME = 'registration';
@@ -25,9 +26,6 @@ const PASSWORD_MISMATCH = 'Passwords are not the same';
 const EMPTY_FIELD = 'Please, fill the form';
 const NO_ERROR = '';
 
-const emailRegexp = (
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
-);
 
 class Registration extends PureComponent {
     static propTypes = {
@@ -77,7 +75,7 @@ class Registration extends PureComponent {
 
         if (!email) {
             result.emailError = EMPTY_FIELD;
-        } else if (!emailRegexp.test(email)) {
+        } else if (!isEmail(email)) {
             result.emailError = INCORRECT_EMAIL;
         }
 

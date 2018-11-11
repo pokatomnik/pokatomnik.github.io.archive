@@ -74,6 +74,14 @@ class LoginForm extends PureComponent {
                         >
                             Sign up
                         </Link>
+                        <Link
+                            component={Button}
+                            to="/reset-password"
+                            bsStyle="warning"
+                            bsSize="small"
+                        >
+                            Reset password
+                        </Link>
                     </ButtonGroup>
                 </form>
             </Navbar.Form>

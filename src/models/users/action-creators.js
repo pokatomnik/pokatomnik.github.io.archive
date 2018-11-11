@@ -2,6 +2,7 @@ import Backendless from 'backendless';
 import isObject from 'lodash.isobject';
 import {push} from 'react-router-redux';
 import {createAction} from 'redux-actions';
+import {actions as toastrActions} from 'react-redux-toastr';
 
 import {setError} from '../error/error';
 import {branch} from './constants';
@@ -34,6 +35,34 @@ export const forgetLastCreatedPasta = createAction(`${branch}:removeLastCreatedP
 export const setPastas = createAction(`${branch}:setPastas`);
 
 export const setIsFetchingPastas = createAction(`${branch}:setIsFetchingPastas`);
+
+export const setIsResettingPassword = createAction(`${branch}:setIsResettingPassword`);
+
+export const resetPassword = (email) => (dispatch) => {
+    dispatch(setIsResettingPassword(true));
+    Backendless.UserService
+        .restorePassword(email)
+        .then(() => {
+            dispatch(toastrActions.add({
+                type: 'light',
+                title: 'Password reset',
+                message: `Please check ${email}`,
+                options: {
+                    showCloseButton: true,
+                }
+            }));
+        })
+        .catch((err) => {
+            console.error(err);
+            dispatch(setError(
+                'Error resetting password',
+                'Please make sure you typed correct email or try again later'
+            ));
+        })
+        .finally(() => {
+            dispatch(setIsResettingPassword(false));
+        });
+};
 
 export const registerUser = ({
     name,

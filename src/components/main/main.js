@@ -19,6 +19,7 @@ import RouteFile from '../route-file/route-file';
 import RouteLastPastas from '../route-last-pastas/route-last-pastas';
 import RouteRegistration from '../route-registration/route-registration';
 import RouteCheckEmail from '../route-check-email/route-check-email';
+import RouteResetPassword from '../route-reset-password/route-reset-password';
 import './toastr-fixes.css';
 
 
@@ -44,6 +45,7 @@ export default function Main() {
                             <Route exact path="/last-pastas" component={RouteLastPastas} />
                             <Route exact path="/registration" component={RouteRegistration} />
                             <Route exact path="/registration/check-email" component={RouteCheckEmail} />
+                            <Route exact path="/reset-password" component={RouteResetPassword} />
                             <Route exact component={Route404} />
                         </Switch>
                     </Col>
