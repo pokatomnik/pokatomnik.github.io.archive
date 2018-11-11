@@ -42,7 +42,6 @@ class ResetPassword extends PureComponent {
         evt.stopPropagation();
 
         const {email} = this.state;
-        console.log(email);
         if (!isEmail(email)) {
             this.setState(() => ({
                 emailError: NOT_EMAIL
