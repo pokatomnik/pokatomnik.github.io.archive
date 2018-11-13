@@ -10,6 +10,7 @@ import Panel from 'react-bootstrap/lib/Panel';
 import Row from 'react-bootstrap/lib/Row';
 import Col from 'react-bootstrap/lib/Col';
 import FormControl from 'react-bootstrap/lib/FormControl';
+import fileType from 'get-file-type-es5';
 
 import Asterisk from '../common/asterisk/asterisk';
 import {encrypt, decrypt} from '../../utils/encryption';
@@ -40,13 +41,21 @@ class EncryptionView extends PureComponent {
         target.select();
     }
 
+    static getMimeSafe(data) {
+        try {
+            return fileType(data).mime;
+        } catch (e) {
+            return 'text/plain';
+        }
+    }
+
     constructor(props) {
         super(props);
 
         this.state = {
             key: '',
             error: '',
-            downloadUrl: ''
+            blob: null
         };
 
         this.handleKeyChange = this.handleKeyChange.bind(this);
@@ -56,7 +65,7 @@ class EncryptionView extends PureComponent {
     componentDidUpdate({file}) {
         if (file !== this.props.file) {
             this.setState({
-                downloadUrl: ''
+                blob: null
             });
         }
     }
@@ -71,7 +80,7 @@ class EncryptionView extends PureComponent {
     }
 
     renderDownloadButton() {
-        if (!this.state.downloadUrl) {
+        if (!this.state.blob) {
             const message = (this.props.method === encrypt)
                 ? 'Press "Encrypt file first"'
                 : 'Press "Decrypt file frist"'
@@ -88,7 +97,7 @@ class EncryptionView extends PureComponent {
         }
         return (
             <DownloadButton
-                downloadUrl={this.state.downloadUrl}
+                blob={this.state.blob}
                 downloadName={this.renderFileName(this.props.file.name)}
             >
                 {this.renderDownloadCaption()}
@@ -110,7 +119,7 @@ class EncryptionView extends PureComponent {
         this.setState({
             key,
             error: '',
-            downloadUrl: ''
+            blob: null
         });
     }
 
@@ -135,11 +144,10 @@ class EncryptionView extends PureComponent {
                 this.props.setError(GENERIC_ERROR_TITLE, GENERIC_ERROR_MESSAGE);
                 return;
             }
-            const blob = new Blob([encryptedData], {type: "text/plain"});
-            const downloadUrl = URL.createObjectURL(blob);
-            this.setState({
-                downloadUrl
+            const blob = new Blob([encryptedData], {
+                type: EncryptionView.getMimeSafe(encryptedData)
             });
+            this.setState({blob});
         }
     }
 
