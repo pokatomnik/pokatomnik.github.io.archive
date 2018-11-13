@@ -1,9 +1,12 @@
+// Polyfills first
+import 'whatwg-fetch';
+import 'babel-polyfill';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';
 import Promise from 'bluebird';
 import Backendless from 'backendless';
-import 'whatwg-fetch';
 
 
 const APP_ID = '018B2CDC-5E5C-A973-FF91-BF05D0515600';
